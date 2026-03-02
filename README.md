@@ -5,107 +5,118 @@
 [![Discord](https://img.shields.io/badge/discord-click-blue)](https://discord.gg/sgMMdUZd3V)
 ![Make With Love](https://img.shields.io/badge/make_with_%E2%9D%A4%EF%B8%8F-white)
 
-#### [English](/README_EN.md) / [繁體中文](/README.md)
+#### [简体中文](/README.md) / [繁體中文](/README_TW.md) / [English](/README_EN.md)
 
-> 加入我們的 Discord 以獲得更多資訊 - https://discord.gg/sgMMdUZd3V
+> 加入我们的 Discord 以获取更多信息 - https://discord.gg/sgMMdUZd3V
 
-palserver GUI 是一款全圖形化介面的專用伺服器架設、管理工具：
+palserver GUI 是一款全图形化界面的幻兽帕鲁专用服务器架设、管理工具：
 
-- **開箱即用**：易於上手，傻瓜式安裝 + 一鍵啟動伺服器。
-- **全圖形化介面**：提供完整且功能強大的 GUI 介面調整世界設定、伺服器設定等。
-- **強大功能擴展**：內建 UE4SS 和 Palguard 防作弊系統、玩家列表、線上地圖、多存檔管理和模組管理等功能，大幅提升伺服器的管理效率和玩家體驗。
+- **开箱即用**：易于上手，傻瓜式安装 + 一键启动服务器。
+- **全图形化界面**：提供完整且功能强大的 GUI 界面调整世界设定、服务器设定等。
+- **强大功能扩展**：内建 UE4SS 和 Palguard 防作弊系统、玩家列表、在线地图、多存档管理和模组管理等功能，大幅提升服务器的管理效率和玩家体验。
+- **多语言支持**：支持简体中文、繁体中文、英语、法语、日语五种语言。
 
 ---
 
-### 一鍵啟動伺服器
+### 一键启动服务器
 
-安裝完成後，建立伺服器，點擊「右下角啟動」即成功架設您的第一個伺服器。
+安装完成后，创建服务器，点击「右下角启动」即成功架设您的第一个服务器。
 
 ![alt text](/readme/menu.png)
 
-### 可視化世界設定選項
+### 可视化世界设定选项
 
-使用滑動條和輸入框調整世界設定，不再需要修改原始文件 PalWorldSettings.ini：
+使用滑动条和输入框调整世界设定，不再需要修改原始文件 PalWorldSettings.ini：
 
 ![alt text](/readme/worldsettings.png)
 
-### 在線玩家列表
+### 在线玩家列表
 
-顯示在線玩家資訊，並提供諸多功能讓房主對玩家操作。
+显示在线玩家信息，并提供诸多功能让房主对玩家进行操作。
 
 ![alt text](/readme/playerlist.png)
 
 ![alt text](/readme/playeraction.png)
 
-### 玩家實時地圖
+### 玩家实时地图
 
-即時顯示玩家在遊戲內的等級、座標和在地圖上的位置。
+即时显示玩家在游戏内的等级、坐标和在地图上的位置。
 
 ![alt text](/readme/onlinemap.png)
 
-### 模組管理、匯出到遊戲
+### 模组管���、导出到游戏
 
-默認安裝 UE4SS 及 Palguard，模組管理面板，一鍵打包到客戶端！
+默认安装 UE4SS 及 Palguard，模组管理面板，一键打包到客户端！
 
 ![alt text](/readme/mod.png)
 
-### 一鍵更新、一鍵最佳化、還有更多
+### 服务器管理功能
 
-除此之外，還有更多的伺服器設定與功能，微調您的伺服器以達到最佳的遊戲體驗！
+- **REST API 集成**：踢出、封禁、解封玩家，立即存档等操作优先使用 REST API，RCON 作为备选方案。
+- **PalDefender 命令**：支持生成帕鲁、给予蛋、白名单管理、无敌模式、清空背包、重命名玩家等进阶操作。
+- **Palguard 设定 GUI**：图形化界面配置 palguard.json 插件设定。
+- **白名单管理**：可视化管理 PalDefender 白名单，仅允许白名单玩家加入服务器。
+- **性能监测**：服务器 CPU / 内存使用率实时监控。
+- **自动重启**：支持定时重启、崩溃重启、内存超限重启。
+- **工作线程数**：可自定义服务器工作线程数量 (1-128)，优化多核 CPU 性能。
+
+### 一键更新、一键优化、还有更多
+
+除此之外，还有更多的服务器设定与功能，微调您的服务器以达到最佳的游戏体验！
 
 ---
 
-### 安裝連結及更新
+### 安装链接及更新
 
-- 安裝包 (推薦)：[點我下載](https://github.com/Dalufishe/palserver-GUI/releases/download/1.1.0/1.1.0-palserver-gui.exe)
-- 免安裝版本：[點我下載](https://github.com/Dalufishe/palserver-GUI/releases/download/1.1.0/unpack-1.1.0-palserver-gui.zip)
+- 安装包 (推荐)：[点击下载](https://github.com/Dalufishe/palserver-GUI/releases/download/1.1.0/1.1.0-palserver-gui.exe)
+- 免安装版本：[点击下载](https://github.com/Dalufishe/palserver-GUI/releases/download/1.1.0/unpack-1.1.0-palserver-gui.zip)
 
-### 常見問題
+### 常见问题
 
-- 使用 VPN 仍無法進入伺服器：[點我](https://dalufishes-team.gitbook.io/palserver-gui/faq/shi-yong-vpn-reng-wu-fa-jin-ru-si-fu-qi)
-- 伺服器無法啟動：[點我](https://dalufishes-team.gitbook.io/palserver-gui/faq/si-fu-qi-wu-fa-qi-dong)
-- 伺服器頻繁崩潰：[點我](https://dalufishes-team.gitbook.io/palserver-gui/faq/si-fu-qi-bin-fan-beng-kui)
-- 沒有顯示在線玩家：[點我](https://dalufishes-team.gitbook.io/palserver-gui/faq/mei-you-xian-shi-zai-xian-wan-jia)
-- 如何將測試版本 GUI 檔案遷移到正式版：[點我](https://dalufishes-team.gitbook.io/palserver-gui/faq/ce-shi-ban-ben-gui-dang-an-qian-yi-dao-zheng-shi-ban)
+- 使用 VPN 仍无法进入服务器：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui/faq/shi-yong-vpn-reng-wu-fa-jin-ru-si-fu-qi)
+- 服务器无法启动：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui/faq/si-fu-qi-wu-fa-qi-dong)
+- 服务器频繁崩溃：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui/faq/si-fu-qi-bin-fan-beng-kui)
+- 没有显示在线玩家：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui/faq/mei-you-xian-shi-zai-xian-wan-jia)
+- 如何将测试版本 GUI 文件迁移到正式版：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui/faq/ce-shi-ban-ben-gui-dang-an-qian-yi-dao-zheng-shi-ban)
 
-### 相關連結
+### 相关链接
 
-- Discord： [點我](https://discord.gg/sgMMdUZd3V)
-- 官方文檔：[點我](https://dalufishes-team.gitbook.io/palserver-gui)
-- 巴哈文：[點我](https://forum.gamer.com.tw/C.php?bsn=71458&snA=2043)
-- yahoo 遊戲新聞連結：[點我](https://tw.news.yahoo.com/palserver-gui-041354287.html)
-- 電玩誌：[點我](https://gank.fanpiece.com/animeradio/%E5%8F%B0%E7%81%A3%E5%A4%A7%E7%A5%9E%E5%89%B5-%E5%B9%BB%E7%8D%B8%E5%B8%95%E9%AD%AF-%E4%B8%80%E9%8D%B5%E9%96%8B%E8%A8%AD%E4%BC%BA%E6%9C%8D%E5%99%A8-%E5%B7%A5%E5%85%B7-%E5%85%A7%E5%BB%BA%E7%B9%81%E4%B8%AD-%E5%9C%96%E5%83%8FUI-c1452714.html)
-- KK3C 狂想曲：[點我](https://kkplay3c.net/steam-pal-server-gui/)
-- 夢遊電玩：[點我](https://www.game735.com/forum.php?mod=viewthread&tid=388027&extra=page%3D1&ordertype=1)
+- Discord：[点击加入](https://discord.gg/sgMMdUZd3V)
+- 官方文档：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui)
+- 巴哈姆特：[点击查看](https://forum.gamer.com.tw/C.php?bsn=71458&snA=2043)
+- Yahoo 游戏新闻：[点击查看](https://tw.news.yahoo.com/palserver-gui-041354287.html)
+- 电玩志：[点击查看](https://gank.fanpiece.com/animeradio/%E5%8F%B0%E7%81%A3%E5%A4%A7%E7%A5%9E%E5%89%B5-%E5%B9%BB%E7%8D%B8%E5%B8%95%E9%AD%AF-%E4%B8%80%E9%8D%B5%E9%96%8B%E8%A8%AD%E4%BC%BA%E6%9C%8D%E5%99%A8-%E5%B7%A5%E5%85%B7-%E5%85%A7%E5%BB%BA%E7%B9%81%E4%B8%AD-%E5%9C%96%E5%83%8FUI-c1452714.html)
+- KK3C 狂想曲：[点击查看](https://kkplay3c.net/steam-pal-server-gui/)
+- 梦游电玩：[点击查看](https://www.game735.com/forum.php?mod=viewthread&tid=388027&extra=page%3D1&ordertype=1)
 
-### 相關影片
+### 相关视频
 
-- 捷克的介紹影片：[點我](https://youtu.be/8Vq7uANT0Eo?si=-nH9lkUpsk7DgMW8)
+- 捷克的介绍视频：[点击观看](https://youtu.be/8Vq7uANT0Eo?si=-nH9lkUpsk7DgMW8)
 
 <a href="https://youtu.be/8Vq7uANT0Eo?si=-nH9lkUpsk7DgMW8" target="_blank">
 <img src="https://i.ytimg.com/vi_webp/8Vq7uANT0Eo/maxresdefault.webp"/>
 </a>
 
-### 條款
+### 条款
 
-程式碼僅供學習用途，不得再次將軟體進行二次打包散佈、販售。也不得進行商業使用。
+代码仅供学习用途，不得将软件进行二次打包散布、贩卖。也不得进行商业使用。
 
-### 參與貢獻
+### 参与贡献
 
-目前 palserver GUI 是我的一人專案，使用 Typescript + React + Electron 開發。如果你有興趣參與專案開發 (不論是軟體設計上、美術、翻譯或者程序開發)，都歡迎聯繫我的 discord (使用者名稱：dalufish) 討論！
+目前 palserver GUI 是一人项目，使用 TypeScript + React + Electron 开发。如果你有兴趣参与项目开发（不论是软件设计、美术、翻译或者程序开发），都欢迎联系 Discord（用户名：dalufish）讨论！
 
-### 給予支持
+### 给予支持
 
-如果你覺得工具有解決到你的問題 :D，請給專案一顆星星，謝謝。
-也可以給予一杯咖啡的支持 [buymeacoffee](https://www.buymeacoffee.com/dalufish) ，鼓勵我繼續創作，感激不盡。
+如果你觉得工具有帮助到你 :D，请给项目一颗星星，谢谢。
+也可以给予一杯咖啡的支持 [buymeacoffee](https://www.buymeacoffee.com/dalufish)，鼓励我继续创作，感激不尽。
 
 <a href="https://www.buymeacoffee.com/Dalufish"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=Dalufish&button_colour=FFDD00&font_colour=000000&font_family=Comic&outline_colour=000000&coffee_colour=ffffff" /></a>
 
-### 回報問題
+### 反馈问题
 
-目前專案仍在早期階段，可能存在一定數量的 bugs (僅管我已經很努力排除)，如果您發現了錯誤歡迎到 [issues](https://github.com/Dalufishe/palserver-GUI/issues) 發表，我會在最短時間內解決問題。另外有想加的功能或改進也都歡迎到 [issues](https://github.com/Dalufishe/palserver-GUI/issues) 提出。
+如果您发现了错误，欢迎到 [issues](https://github.com/Dalufishe/palserver-GUI/issues) 发表，我会在最短时间内解决问题。另外有想加的功能或改进也都欢迎到 [issues](https://github.com/Dalufishe/palserver-GUI/issues) 提出。
 
-### 特別感謝
+### 特别感谢
 
-有大家才有現在的工具可以使用，非常感謝大家。
+有大家才有现在的工具可以使用，非常感谢大家。
 https://dalufishes-team.gitbook.io/palserver-gui/gei-yu-zhi-chi/te-bie-gan-xie-ming-dan

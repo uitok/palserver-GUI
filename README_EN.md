@@ -5,7 +5,7 @@
 [![Discord](https://img.shields.io/badge/discord-click-blue)](https://discord.gg/sgMMdUZd3V)
 ![Make With Love](https://img.shields.io/badge/make_with_%E2%9D%A4%EF%B8%8F-white)
 
-#### [繁體中文](/README.md) / [English](/README_EN.md)
+#### [简体中文](/README.md) / [繁體中文](/README_TW.md) / [English](/README_EN.md)
 
 > Join our Discord for more infomation - https://discord.gg/sgMMdUZd3V
 
