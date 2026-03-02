@@ -19,4 +19,5 @@ export type ServerInstanceSetting = {
   readonly OnlineMapEnabled: boolean;
   readonly LogEnabled: boolean;
   readonly UseIndependentProcess: boolean;
+  readonly workerThreads?: number;
 };

@@ -4,15 +4,16 @@ import { animated, useSpring, useTransition } from 'react-spring';
 import _ from 'lodash';
 import useSelectedServerInstance from '../../../redux/selectedServerInstance/useSelectedServerInstance';
 import Channels from '../../../../main/ipcs/channels';
+import { WorldSettingsValues } from '../../../../types/WorldSettings.types';
 
 export default function WorldSettingsActionbar({
   prevWorldSettings,
   worldSettings,
   setWorldSettings,
 }: {
-  prevWorldSettings: any;
-  worldSettings: any;
-  setWorldSettings: any;
+  prevWorldSettings: WorldSettingsValues;
+  worldSettings: WorldSettingsValues;
+  setWorldSettings: (ws: WorldSettingsValues) => void;
 }) {
   const { t } = useTranslation();
 

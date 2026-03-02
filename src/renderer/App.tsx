@@ -17,6 +17,7 @@ import useRunServerInstall from './hooks/server/useRunServerInstall';
 import EngineInstallingHint from './components/Home/EngineInstallingHint/EngineInstallingHint';
 import useServerEngineVersion from './hooks/server/useServerEngineVersion';
 import EngineNeedInstall from './components/Home/EngineNeedInstall/EngineNeedInstall';
+import ErrorBoundary from './components/ErrorBoundary';
 
 export default function App() {
   // const [hasInstalled, installMessage] = useRunServerInstall();
@@ -24,8 +25,9 @@ export default function App() {
   const { selectedServerInstance } = useSelectedServerInstance();
 
   return (
-    <Router>
-      <Theme>
+    <ErrorBoundary>
+      <Router>
+        <Theme>
         <AlertDialog.Root>
           {/* <ThemePanel /> */}
           <div className="App">
@@ -66,5 +68,6 @@ export default function App() {
         </AlertDialog.Root>
       </Theme>
     </Router>
+    </ErrorBoundary>
   );
 }

@@ -4,7 +4,7 @@ import { ServerInstanceSetting } from '../../../../../types/ServerInstanceSettin
 
 type Props = {
   info: ServerInstanceSetting;
-  children: any;
+  children: React.ReactNode;
 };
 
 export default function ServerInfoProvider(props: Props) {

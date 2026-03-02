@@ -38,7 +38,6 @@ ipcMain.on(Channels.getServerLog, async (event, serverId) => {
     serverLogFile = path.join(serverLogsPath, serverLogsDir[0]);
 
     log = fs.readFileSync(serverLogFile, { encoding: 'utf-8' });
-    console.log(log);
     event.reply(Channels.getServerLogReply.DATA, log);
   });
 });

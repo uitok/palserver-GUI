@@ -14,6 +14,7 @@ import useSelectedServerInstance from '../../../../../redux/selectedServerInstan
 import ItemItem from './ItemItem/ItemItem';
 import { MdSearch } from 'react-icons/md';
 import formatLocale from '../../../../../utils/formatLocale';
+import { ActionType } from '../PlayerMoreAction';
 
 export default function GiveItemToPlayer({
   actionType,
@@ -22,8 +23,8 @@ export default function GiveItemToPlayer({
   steamId,
   name,
 }: {
-  actionType: any;
-  setActionType: any;
+  actionType: ActionType;
+  setActionType: (type: ActionType) => void;
   playerId: string;
   steamId: string;
   name: string;
@@ -105,7 +106,7 @@ export default function GiveItemToPlayer({
       </AlertDialog.Description>
       <Flex gap="3" mt="4" justify="between">
         <TextField.Root
-          placeholder="搜尋道具 . . ."
+          placeholder={t('SearchItem')}
           size="2"
           value={searchText}
           onChange={(e) => {
@@ -124,13 +125,13 @@ export default function GiveItemToPlayer({
             variant="soft"
             color="gray"
           >
-            回上一頁
+            {t('Back')}
           </Button>
           {itemsAmount
             .map((v) => Object.values(v)[0])
             .reduce((a, b) => a + b) !== 0 && (
             <Button color="yellow" onClick={handleSendItem}>
-              送出
+              {t('Send')}
             </Button>
           )}
         </div>

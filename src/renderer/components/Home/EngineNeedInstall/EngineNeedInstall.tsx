@@ -26,8 +26,6 @@ export default function EngineNeedInstall() {
 
   const serverInfos = useAllServerInfo();
 
-  console.log();
-
   const [openDialog, setOpenDialog] = useState(false);
   useEffect(() => {
     // @ts-ignore

@@ -60,7 +60,7 @@ const installExtensions = async () => {
       extensions.map((name) => installer[name]),
       forceDownload,
     )
-    .catch(console.log);
+    .catch(console.error);
 };
 
 const createWindow = async () => {
@@ -145,7 +145,7 @@ app
       if (mainWindow === null) createWindow();
     });
   })
-  .catch(console.log);
+  .catch(console.error);
 
 ipcMain.handle('selectDir', async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {

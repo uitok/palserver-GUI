@@ -14,7 +14,7 @@ export default function ActionItem({
   subtitle: string;
   buttonText: string;
   color?: string;
-  onButtonClick?: any;
+  onButtonClick?: (value: string | number) => void;
   hasInput?: boolean;
   inputDefaultValue: number;
 }) {

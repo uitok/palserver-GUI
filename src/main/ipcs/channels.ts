@@ -71,5 +71,8 @@ const Channels = {
   exportModsToClientSide: 'export-mods-to-client-side',
   // ban
   getServerBanList: 'get-server-ban-list',
+  // paldefender config
+  getPaldefenderConfig: 'get-paldefender-config',
+  setPaldefenderConfig: 'set-paldefender-config',
 } as const;
 export default Channels;

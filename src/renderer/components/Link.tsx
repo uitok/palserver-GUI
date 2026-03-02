@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Link as RLink, Theme } from '@radix-ui/themes';
 import { LuExternalLink } from 'react-icons/lu';
 
 export default function Link(props: {
-  children: any;
+  children: ReactNode;
   href: string;
   appearance?: 'light' | 'dark';
 }) {

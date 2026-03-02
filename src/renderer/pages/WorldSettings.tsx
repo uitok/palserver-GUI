@@ -3,6 +3,7 @@ import { IconButton, Tabs, Tooltip } from '@radix-ui/themes';
 import useTranslation from '../hooks/translation/useTranslation';
 import { MdEditDocument } from 'react-icons/md';
 import _, { isEmpty, map, pickBy } from 'lodash';
+import { WorldSettingsValues } from '../../types/WorldSettings.types';
 import {
   BuildSettingsOptionsKey,
   DropSettingsOptionsKey,
@@ -10,6 +11,7 @@ import {
   OthersSettingsOptionsKey,
   PalSettingsOptionsKey,
   PlayerSettingsOptionsKey,
+  PvPSettingsOptionsKey,
   worldSettingsOptions,
 } from '../components/WorldSettings/settings';
 import useSelectedServerInstance from '../redux/selectedServerInstance/useSelectedServerInstance';
@@ -27,7 +29,7 @@ export default function WorldSettings() {
   const { worldSettings: prevWorldSettings } = useWorldSettings(
     selectedServerInstance,
   );
-  const [worldSettings, setWorldSettings] = useState<any>({});
+  const [worldSettings, setWorldSettings] = useState<WorldSettingsValues>({});
   useEffect(() => {
     if (!isEmpty(prevWorldSettings) && !hasInitWorldSettings) {
       setWorldSettings(prevWorldSettings);
@@ -60,21 +62,6 @@ export default function WorldSettings() {
               <MdEditDocument />
             </IconButton>
           </Tooltip>
-          {/* <SegmentedControl.Root
-            value={interfaceMode}
-            onValueChange={(v: any) => {
-              setInterfaceMode(v);
-            }}
-            size="2"
-            variant="classic"
-          >
-            <SegmentedControl.Item value="gui">
-              <LuAppWindow size={16} />
-            </SegmentedControl.Item>
-            <SegmentedControl.Item value="json">
-              <TbJson size={24} />
-            </SegmentedControl.Item>
-          </SegmentedControl.Root> */}
         </div>
         {interfaceMode === 'gui' ? (
           <Tabs.Root defaultValue="pal" style={{ width: '100%' }}>
@@ -120,6 +107,12 @@ export default function WorldSettings() {
               >
                 {/* 其他設定 */}
                 {t('OthersSettings')}
+              </Tabs.Trigger>
+              <Tabs.Trigger
+                value="pvp"
+                style={{ color: 'white', fontWeight: 500 }}
+              >
+                {t('PvPSettings')}
               </Tabs.Trigger>
             </Tabs.List>
             <div className="py-4">
@@ -225,6 +218,23 @@ export default function WorldSettings() {
                   )}
                 </div>
               </Tabs.Content>
+              <Tabs.Content value="pvp">
+                <div className="flex flex-col justify-center gap-2 p-2">
+                  {map(
+                    pickBy(worldSettingsOptions, (v, k) =>
+                      PvPSettingsOptionsKey.includes(k),
+                    ),
+                    (v, k) => (
+                      <WorldSettingsItem
+                        key={k}
+                        id={k}
+                        worldSettings={worldSettings}
+                        setWorldSettings={setWorldSettings}
+                      />
+                    ),
+                  )}
+                </div>
+              </Tabs.Content>
             </div>
           </Tabs.Root>
         ) : (
@@ -239,4 +249,3 @@ export default function WorldSettings() {
     </div>
   );
 }
-// <Button onClick={() => {}}>{t('VerifyChange')}</Button>;

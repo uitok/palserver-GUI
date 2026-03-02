@@ -18,14 +18,16 @@ import useTranslation from '../../../hooks/translation/useTranslation';
 import useServerMetrics from '../../../hooks/server/resources/useServerMetrics';
 import useServerInfo from '../../../hooks/server/info/useServerInfo';
 
-const defaultRecord: any = _.range(60);
+const defaultRecord: { cpuUsage: number; memUsage: number }[] = _.range(60);
 defaultRecord.fill({ cpuUsage: 0, memUsage: 0 });
+
+type ResourceUsage = { cpuUsage: number; memUsage: number };
 
 type Props = {
   onMainChartIsChange: (
     chart: 'computer' | 'process',
-    { cpuUsage, memUsage }: any,
-    { processCpuUsage, processMemUsage }: any,
+    computerUsage: ResourceUsage,
+    processUsage: ResourceUsage,
   ) => void;
 };
 
@@ -115,7 +117,7 @@ export default function PerformanceMonitor(props: Props) {
               size="1"
               color="gray"
               value={chartMode}
-              onValueChange={(v: any) => {
+              onValueChange={(v: 'cpu' | 'ram') => {
                 setChartMode(v);
               }}
             >

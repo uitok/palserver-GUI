@@ -8,7 +8,7 @@ import {
 import gamePalsOrigin from '../../../../../../../assets/game-data/data/pals.json';
 import { useState } from 'react';
 import { MdSearch } from 'react-icons/md';
-import PalItem from './PalItem/PalItem';
+import PalItem from '../GivePalToPlayer/PalItem/PalItem';
 import useTranslation from '../../../../../hooks/translation/useTranslation';
 import Channels from '../../../../../../main/ipcs/channels';
 import useSelectedServerInstance from '../../../../../redux/selectedServerInstance/useSelectedServerInstance';
@@ -26,7 +26,7 @@ for (const key in gamePalsOrigin) {
   };
 }
 
-export default function GivePalToPlayer({
+export default function SpawnPalForPlayer({
   actionType,
   setActionType,
   playerId,
@@ -45,41 +45,50 @@ export default function GivePalToPlayer({
 
   const { selectedServerInstance } = useSelectedServerInstance();
 
-  // format: [{A:1}, {B:3}, {C:0}]
   const [palsAmount, setPalsAmount] = useState(
     Object.keys(gamePals).map((pal) => ({ [pal]: 0 })),
   );
 
   const [searchText, setSearchText] = useState('');
+  const [palLevel, setPalLevel] = useState(1);
 
-  // 執行指令
-  const handleSendPal = () => {
+  const handleSpawnPal = () => {
     palsAmount.forEach((palAmount) => {
       const pal = Object.keys(palAmount)[0];
       const amount = Object.values(palAmount)[0];
 
       if (amount) {
-        window.electron.ipcRenderer.invoke(
-          Channels.sendRCONCommand,
-          selectedServerInstance,
-          `givepal ${pgSteamId} ${pal} ${amount}`,
-        );
+        for (let i = 0; i < amount; i++) {
+          window.electron.ipcRenderer.invoke(
+            Channels.sendRCONCommand,
+            selectedServerInstance,
+            `spawnpal ${pgSteamId} ${pal} ${palLevel}`,
+          );
+        }
       }
     });
-    // 重置
     setPalsAmount(Object.keys(gamePals).map((item) => ({ [item]: 0 })));
   };
 
   return (
     <AlertDialog.Content>
       <AlertDialog.Title>
-        {formatLocale(t('GivePlayerPal'), [name])}
+        {formatLocale(t('SpawnPalDesc'), [name])}
       </AlertDialog.Title>
       <AlertDialog.Description>
-        {/* <p className="my-2">進階操作使用第三方插件 PalGuard 實現</p> */}
+        <div className="flex items-center gap-2 mb-2">
+          <label>{t('PalLevel')}:</label>
+          <TextField.Root
+            style={{ width: 80 }}
+            size="2"
+            type="number"
+            value={palLevel}
+            onChange={(e) => setPalLevel(Number(e.target.value))}
+          />
+        </div>
         <ScrollArea
           scrollbars="vertical"
-          style={{ height: '65vh' }}
+          style={{ height: '60vh' }}
           className="pt-2"
         >
           <ul className="flex flex-col">
@@ -146,8 +155,8 @@ export default function GivePalToPlayer({
           {palsAmount
             .map((v) => Object.values(v)[0])
             .reduce((a, b) => a + b) !== 0 && (
-            <Button color="yellow" onClick={handleSendPal}>
-              {t('Send')}
+            <Button color="yellow" onClick={handleSpawnPal}>
+              {t('Spawn')}
             </Button>
           )}
         </div>

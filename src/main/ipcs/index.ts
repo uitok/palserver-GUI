@@ -47,6 +47,8 @@ import './init/getIsFirstInstall';
 
 import './server/plugin/updatePalguard';
 import './server/plugin/updateUE4SS';
+import './server/plugin/getPaldefenderConfig';
+import './server/plugin/setPaldefenderConfig';
 
 import './server/cache/clearServerCache';
 

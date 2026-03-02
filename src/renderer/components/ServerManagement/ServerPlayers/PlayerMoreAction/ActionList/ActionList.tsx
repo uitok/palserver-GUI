@@ -1,4 +1,3 @@
-/* eslint-disable prefer-template */
 /* eslint-disable react/jsx-curly-brace-presence */
 import { AlertDialog, Button, Flex } from '@radix-ui/themes';
 import Channels from '../../../../../../main/ipcs/channels';
@@ -6,6 +5,8 @@ import useTranslation from '../../../../../hooks/translation/useTranslation';
 import useSelectedServerInstance from '../../../../../redux/selectedServerInstance/useSelectedServerInstance';
 import ActionItem from '../AcionItem/AcionItem';
 import formatLocale from '../../../../../utils/formatLocale';
+import sanitizeRconInput from '../../../../../../utils/sanitizeRconInput';
+import { ActionType } from '../PlayerMoreAction';
 
 export default function ActionList({
   actionType,
@@ -14,8 +15,8 @@ export default function ActionList({
   steamid,
   name,
 }: {
-  actionType: any;
-  setActionType: any;
+  actionType: ActionType;
+  setActionType: (type: ActionType) => void;
   playerId: string;
   steamid: string;
   name: string;
@@ -36,18 +37,43 @@ export default function ActionList({
   };
 
   const handleKickUser = () => {
-    window.electron.ipcRenderer.invoke(
-      Channels.sendRCONCommand,
-      selectedServerInstance,
-      `KickPlayer ${steamid}`,
-    );
+    window.electron.ipcRenderer
+      .invoke(Channels.sendRestAPI, selectedServerInstance, '/kick', {
+        method: 'post',
+        body: { userid: steamid },
+      })
+      .catch(() => {
+        // Fallback to RCON
+        window.electron.ipcRenderer.invoke(
+          Channels.sendRCONCommand,
+          selectedServerInstance,
+          `KickPlayer ${steamid}`,
+        );
+      });
   };
 
   const handleBanUser = () => {
+    window.electron.ipcRenderer
+      .invoke(Channels.sendRestAPI, selectedServerInstance, '/ban', {
+        method: 'post',
+        body: { userid: steamid },
+      })
+      .catch(() => {
+        // Fallback to RCON
+        window.electron.ipcRenderer.invoke(
+          Channels.sendRCONCommand,
+          selectedServerInstance,
+          `BanPlayer ${playerId}`,
+        );
+      });
+  };
+
+  const handleUnbanUser = () => {
     window.electron.ipcRenderer.invoke(
-      Channels.sendRCONCommand,
+      Channels.sendRestAPI,
       selectedServerInstance,
-      `BanPlayer ${playerId}`,
+      '/unban',
+      { method: 'post', body: { userid: steamid } },
     );
   };
 
@@ -72,14 +98,14 @@ export default function ActionList({
             onButtonClick={handleSetAdmin}
           />
           <ActionItem
-            title={t('KickPlayer') + ' ' + name}
+            title={formatLocale(t('KickPlayerTitle'), [name])}
             subtitle={formatLocale(t('KickPlayerDesc'), [name, name])}
             buttonText={t('KickPlayer')}
             color="red"
             onButtonClick={handleKickUser}
           />
           <ActionItem
-            title={t('Ban') + ' ' + name}
+            title={formatLocale(t('BanPlayerTitle'), [name])}
             subtitle={formatLocale(t('BanDesc'), [name, name])}
             buttonText={t('Ban')}
             color="red"
@@ -91,6 +117,12 @@ export default function ActionList({
             buttonText={t('Ban')}
             color="red"
             onButtonClick={handleBanUserIP}
+          />
+          <ActionItem
+            title={formatLocale(t('UnbanPlayerTitle'), [name])}
+            subtitle={formatLocale(t('UnbanDesc'), [name])}
+            buttonText={t('Unban')}
+            onButtonClick={handleUnbanUser}
           />
           <ActionItem
             title={t('GiveItem')}
@@ -168,6 +200,109 @@ export default function ActionList({
                 selectedServerInstance,
                 `givebosstech ${pgSteamId} ${value}`,
               );
+            }}
+          />
+          <ActionItem
+            title={t('WhitelistAdd')}
+            subtitle={formatLocale(t('WhitelistAddDesc'), [name])}
+            buttonText={t('Add')}
+            onButtonClick={() => {
+              window.electron.ipcRenderer.invoke(
+                Channels.sendRCONCommand,
+                selectedServerInstance,
+                `whitelist_add ${pgSteamId}`,
+              );
+            }}
+          />
+          <ActionItem
+            title={t('RenamePlayer')}
+            subtitle={formatLocale(t('RenamePlayerDesc'), [name])}
+            buttonText={t('Set')}
+            color="yellow"
+            hasInput
+            inputDefaultValue={''}
+            onButtonClick={(value: string) => {
+              window.electron.ipcRenderer.invoke(
+                Channels.sendRCONCommand,
+                selectedServerInstance,
+                `renameplayer ${pgSteamId} ${sanitizeRconInput(String(value))}`,
+              );
+            }}
+          />
+          <ActionItem
+            title={t('GodMode')}
+            subtitle={formatLocale(t('GodModeDesc'), [name])}
+            buttonText={t('Toggle')}
+            color="yellow"
+            onButtonClick={() => {
+              window.electron.ipcRenderer.invoke(
+                Channels.sendRCONCommand,
+                selectedServerInstance,
+                `godmode ${pgSteamId}`,
+              );
+            }}
+          />
+          <ActionItem
+            title={t('LearnTech')}
+            subtitle={formatLocale(t('LearnTechDesc'), [name])}
+            buttonText={t('Give')}
+            color="yellow"
+            hasInput
+            inputDefaultValue={''}
+            onButtonClick={(value: string) => {
+              window.electron.ipcRenderer.invoke(
+                Channels.sendRCONCommand,
+                selectedServerInstance,
+                `learntech ${pgSteamId} ${sanitizeRconInput(String(value))}`,
+              );
+            }}
+          />
+          <ActionItem
+            title={t('SpawnPal')}
+            subtitle={formatLocale(t('SpawnPalDesc'), [name])}
+            buttonText={t('Choose')}
+            color="yellow"
+            onButtonClick={() => {
+              setActionType('spawn_pal');
+            }}
+          />
+          <ActionItem
+            title={t('GiveEgg')}
+            subtitle={formatLocale(t('GiveEggDesc'), [name])}
+            buttonText={t('Choose')}
+            color="yellow"
+            onButtonClick={() => {
+              setActionType('give_egg');
+            }}
+          />
+          <ActionItem
+            title={t('ClearInventory')}
+            subtitle={formatLocale(t('ClearInventoryDesc'), [name])}
+            buttonText={t('Clear')}
+            color="red"
+            onButtonClick={() => {
+              if (window.confirm(t('ClearInventoryConfirm'))) {
+                window.electron.ipcRenderer.invoke(
+                  Channels.sendRCONCommand,
+                  selectedServerInstance,
+                  `clearinv ${pgSteamId}`,
+                );
+              }
+            }}
+          />
+          <ActionItem
+            title={t('DeletePals')}
+            subtitle={formatLocale(t('DeletePalsDesc'), [name])}
+            buttonText={t('Delete')}
+            color="red"
+            onButtonClick={() => {
+              if (window.confirm(t('DeletePalsConfirm'))) {
+                window.electron.ipcRenderer.invoke(
+                  Channels.sendRCONCommand,
+                  selectedServerInstance,
+                  `deletepals ${pgSteamId} all`,
+                );
+              }
             }}
           />
         </div>

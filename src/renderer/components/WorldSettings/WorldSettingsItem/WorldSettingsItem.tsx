@@ -4,15 +4,26 @@ import { Select, Slider, Switch, TextField, Theme } from '@radix-ui/themes';
 import { isBoolean } from 'lodash';
 import useTranslation from '../../../hooks/translation/useTranslation';
 import { worldSettingsOptions } from '../settings';
+import { WorldSettingsValues } from '../../../../types/WorldSettings.types';
 
-function WorldSettingsItem({ id, worldSettings, setWorldSettings }) {
+function WorldSettingsItem({
+  id,
+  worldSettings,
+  setWorldSettings,
+}: {
+  id: string;
+  worldSettings: WorldSettingsValues;
+  setWorldSettings: (ws: WorldSettingsValues) => void;
+}) {
   const { t } = useTranslation();
 
   return (
     <div key={id} className="w-full flex items-center gap-4">
       <label className="w-80">{t(id)}：</label>
       <div className="w-14">
-        {worldSettingsOptions[id]?.type === 'options' ? (
+        {worldSettingsOptions[id]?.type === 'text' ? (
+          ''
+        ) : worldSettingsOptions[id]?.type === 'options' ? (
           t(`${id}_${worldSettings[id]}`)
         ) : worldSettingsOptions[id].type === 'switch' ? (
           t(
@@ -55,6 +66,29 @@ function WorldSettingsItem({ id, worldSettings, setWorldSettings }) {
           </div>
         )}
       </div>
+      {worldSettingsOptions[id]?.type === 'text' && (
+        <Theme
+          appearance="dark"
+          style={{ background: 'inherit', fontFamily: 'inherit' }}
+        >
+          <TextField.Root
+            style={{
+              fontFamily: 'inherit',
+              fontSize: 14,
+              flex: 1,
+            }}
+            size="2"
+            placeholder={t('DenyTechnologyListPlaceholder')}
+            value={worldSettings[id] || worldSettingsOptions[id]?.default || ''}
+            onChange={(e) => {
+              setWorldSettings({
+                ...worldSettings,
+                [id]: e.target.value,
+              });
+            }}
+          />
+        </Theme>
+      )}
       {worldSettingsOptions[id]?.type === 'switch' && (
         <Switch
           variant="classic"

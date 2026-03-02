@@ -18,6 +18,8 @@ ipcMain.handle(
       };
       const response = await sendCommand(serverOptions, command);
       return response;
-    } catch (e) {}
+    } catch (e) {
+      console.error('[sendRCONCommand]', e);
+    }
   },
 );

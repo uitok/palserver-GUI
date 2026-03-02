@@ -1,5 +1,5 @@
 // redux
-import { combineReducers, createStore } from 'redux';
+import { combineReducers, legacy_createStore as createStore } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { selectedServerInstance } from './selectedServerInstance/selectedServerInstance.reducer';
@@ -14,7 +14,7 @@ const reducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: [''],
+  whitelist: [] as string[],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);

@@ -5,6 +5,16 @@ import { useState } from 'react';
 import GivePalToPlayer from './GivePalToPlayer/GivePalToPlayer';
 import GiveItemToPlayer from './GiveItemToPlayer/GiveItemToPlayer';
 import GiveExpToPlayer from './GiveExpToPlayer/GiveExpToPlayer';
+import SpawnPalForPlayer from './SpawnPalForPlayer/SpawnPalForPlayer';
+import GiveEggToPlayer from './GiveEggToPlayer/GiveEggToPlayer';
+
+export type ActionType =
+  | 'list'
+  | 'give_items'
+  | 'give_pals'
+  | 'give_exps'
+  | 'spawn_pal'
+  | 'give_egg';
 
 export default function PlayerMoreAction({
   playerId,
@@ -17,9 +27,7 @@ export default function PlayerMoreAction({
 }) {
   const { t } = useTranslation();
 
-  const [actionType, setActionType] = useState<
-    'list' | 'give_items' | 'give_pals' | 'give_exps'
-  >('list');
+  const [actionType, setActionType] = useState<ActionType>('list');
 
   return (
     <AlertDialog.Root
@@ -61,6 +69,24 @@ export default function PlayerMoreAction({
       )}
       {actionType === 'give_exps' && (
         <GiveExpToPlayer
+          actionType={actionType}
+          setActionType={setActionType}
+          playerId={playerId}
+          steamId={steamId}
+          name={name}
+        />
+      )}
+      {actionType === 'spawn_pal' && (
+        <SpawnPalForPlayer
+          actionType={actionType}
+          setActionType={setActionType}
+          playerId={playerId}
+          steamId={steamId}
+          name={name}
+        />
+      )}
+      {actionType === 'give_egg' && (
+        <GiveEggToPlayer
           actionType={actionType}
           setActionType={setActionType}
           playerId={playerId}

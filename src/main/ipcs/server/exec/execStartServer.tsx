@@ -201,7 +201,10 @@ const startServer = async (
     serverInfo.performanceOptimizationEnabled ? '-useperfthreads' : '',
     serverInfo.performanceOptimizationEnabled ? '-NoAsyncLoadingThread' : '',
     serverInfo.performanceOptimizationEnabled ? '-UseMultithreadForDS' : '',
-  ]);
+    worldSettings.ServerPlayerMaxNum ? `-players=${worldSettings.ServerPlayerMaxNum}` : '',
+    worldSettings.LogFormatType && worldSettings.LogFormatType !== 'Text' ? `-logformat=${worldSettings.LogFormatType}` : '',
+    serverInfo.workerThreads ? `-NumberOfWorkerThreadsServer=${serverInfo.workerThreads}` : '',
+  ].filter(Boolean));
 
   const processId = palserverStream.pid;
 
@@ -219,12 +222,10 @@ const startServer = async (
   });
 
   palserverStream.on('exit', () => {
-    console.log('exit');
     event.reply(Channels.execStartServerReply.EXIT, serverId, processId);
   });
 
   palserverStream.on('close', () => {
-    console.log('close');
     event.reply(Channels.execStartServerReply.EXIT, serverId, processId);
   });
 
@@ -233,7 +234,7 @@ const startServer = async (
   });
 
   palserverStream.on('error', (e) => {
-    console.log('error', e);
+    console.error('Server process error:', e);
     event.reply(Channels.execStartServerReply.EXIT, serverId, processId);
   });
 

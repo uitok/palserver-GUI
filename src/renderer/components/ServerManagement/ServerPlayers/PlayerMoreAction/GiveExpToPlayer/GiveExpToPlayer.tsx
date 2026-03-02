@@ -4,6 +4,7 @@ import useSelectedServerInstance from '../../../../../redux/selectedServerInstan
 import Channels from '../../../../../../main/ipcs/channels';
 import formatLocale from '../../../../../utils/formatLocale';
 import useTranslation from '../../../../../hooks/translation/useTranslation';
+import { ActionType } from '../PlayerMoreAction';
 
 export default function GiveExpToPlayer({
   actionType,
@@ -12,8 +13,8 @@ export default function GiveExpToPlayer({
   steamId,
   name,
 }: {
-  actionType: any;
-  setActionType: any;
+  actionType: ActionType;
+  setActionType: (type: ActionType) => void;
   playerId: string;
   steamId: string;
   name: string;
@@ -68,10 +69,10 @@ export default function GiveExpToPlayer({
             variant="soft"
             color="gray"
           >
-            回上一頁
+            {t('Back')}
           </Button>
           <Button color="yellow" onClick={handleSendExp}>
-            送出
+            {t('Send')}
           </Button>
         </div>
       </Flex>

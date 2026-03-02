@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Channels from '../../../../main/ipcs/channels';
 import useIsRunningServers from '../../../redux/isRunningServers/useIsRunningServers';
+import usePolling from '../../usePolling';
 
 const useServerMetrics = (serverId: string) => {
   const { includeRunningServers } = useIsRunningServers();
@@ -19,21 +20,22 @@ const useServerMetrics = (serverId: string) => {
     uptime: 0,
   });
 
-  useEffect(() => {
-    const i = setInterval(() => {
+  const isRunning = includeRunningServers(serverId);
+
+  usePolling(
+    () => {
       window.electron.ipcRenderer
         .invoke(Channels.sendRestAPI, serverId, '/metrics')
-        .then((data: any) => {
+        .then((data: typeof serverMetrics) => {
           setServerMetrics(data);
         })
         .catch((error) => {
-          console.log(error);
+          console.error('[useServerMetrics]', error);
         });
-    }, 1000);
-    return () => {
-      clearInterval(i);
-    };
-  }, [serverId]);
+    },
+    3000,
+    isRunning,
+  );
 
   return serverMetrics;
 };

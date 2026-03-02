@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Channels from '../../../../main/ipcs/channels';
+import { WorldSettingsValues } from '../../../../types/WorldSettings.types';
+import usePolling from '../../usePolling';
 
 /** 用 redux 搭配 refresh 函示改寫 */
 
 const useWorldSettings = (serverId: string) => {
-  const [worldSettings, setWorldSettings] = useState<any>({});
+  const [worldSettings, setWorldSettings] = useState<WorldSettingsValues>({});
 
-  useEffect(() => {
-    const i = setInterval(() => {
+  usePolling(
+    () => {
       if (serverId) {
         window.electron.ipcRenderer
           .invoke(Channels.getWorldSettings, serverId)
@@ -15,14 +17,14 @@ const useWorldSettings = (serverId: string) => {
             setWorldSettings(info);
           });
       }
-    }, 300);
-    return () => {
-      clearInterval(i);
-    };
-  }, [serverId]);
+    },
+    300,
+    !!serverId,
+  );
+
   return {
     worldSettings,
-    setWorldSettings: (newWorldSettings: any) => {
+    setWorldSettings: (newWorldSettings: WorldSettingsValues) => {
       window.electron.ipcRenderer.invoke(
         Channels.setWorldSettings,
         serverId,

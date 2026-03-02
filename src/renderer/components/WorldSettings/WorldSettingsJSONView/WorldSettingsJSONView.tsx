@@ -1,6 +1,8 @@
 import React from 'react';
 import JsonView from '@uiw/react-json-view';
 
+import { WorldSettingsValues } from '../../../../types/WorldSettings.types';
+
 const customTheme = {
   '--w-rjv-color': '#9cdcfe',
   '--w-rjv-key-number': '#268bd2',
@@ -42,7 +44,7 @@ const customTheme = {
 export default function WorldSettingsJSONView({
   worldSettings,
 }: {
-  worldSettings: any;
+  worldSettings: WorldSettingsValues;
 }) {
   return (
     <div className="mt-[60px] w-full">

@@ -1,16 +1,13 @@
-/* eslint-disable no-use-before-define */
 import {
-  AlertDialog,
   Button,
-  Dialog,
   TextField,
   Theme,
 } from '@radix-ui/themes';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useTranslation from '../../../../hooks/translation/useTranslation';
 import Channels from '../../../../../main/ipcs/channels';
 import useSelectedServerInstance from '../../../../redux/selectedServerInstance/useSelectedServerInstance';
-import Schedule from './Schedule/Schedule';
+import sanitizeRconInput from '../../../../../utils/sanitizeRconInput';
 
 export default function Boardcastbar() {
   const { t } = useTranslation();
@@ -33,7 +30,7 @@ export default function Boardcastbar() {
     const response = await window.electron.ipcRenderer.invoke(
       Channels.sendRCONCommand,
       selectedServerInstance,
-      input.slice(1),
+      sanitizeRconInput(input.slice(1)),
     );
     window.electron.ipcRenderer.sendMessage('alert', response);
   };
@@ -47,27 +44,10 @@ export default function Boardcastbar() {
     );
   };
 
-  const [openSchedule, setOpenSchedule] = useState(false);
-
   return (
-    <>
-      <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
         {/* 設定 */}
         <div className="flex items-center justify-end gap-2">
-          {/* <AlertDialog.Trigger>
-            <Button
-              size="1"
-              color="gray"
-              onClick={() => {
-                setOpenSchedule(true);
-              }}
-            >
-              {t('Schedule')}
-            </Button>
-          </AlertDialog.Trigger>
-          <Button size="1" color="gray">
-            {t('CommandsList')}
-          </Button> */}
           <Button
             size="1"
             color="gray"
@@ -84,6 +64,19 @@ export default function Boardcastbar() {
             }}
           >
             {t('LogFolder')}
+          </Button>
+          <Button
+            size="1"
+            color="yellow"
+            onClick={() => {
+              window.electron.ipcRenderer.invoke(
+                Channels.sendRCONCommand,
+                selectedServerInstance,
+                'reloadcfg',
+              );
+            }}
+          >
+            {t('ReloadConfig')}
           </Button>
         </div>
         <div>
@@ -108,8 +101,6 @@ export default function Boardcastbar() {
             />
           </Theme>
         </div>
-      </div>
-      {openSchedule && <Schedule />}
-    </>
+    </div>
   );
 }

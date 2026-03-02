@@ -23,16 +23,26 @@ export const PlayerSettingsOptionsKey = [
   'PlayerStomachDecreaceRate',
   'PlayerStaminaDecreaceRate',
   'PlayerAutoHPRegeneRate',
-  'PlayerAutoHPRegeneRate',
+  'PlayerAutoHpRegeneRateInSleep',
   'bEnablePlayerToPlayerDamage',
   'bEnableFriendlyFire',
   'bIsPvP',
   'bEnableFastTravel',
+  'bEnableFastTravelOnlyBaseCamp',
   'bIsStartLocationSelectByMap',
   'DeathPenalty',
   'CoopPlayerMaxNum',
   'ServerPlayerMaxNum',
   'bShowPlayerList',
+  'bAllowEnhanceStat_Attack',
+  'bAllowEnhanceStat_Health',
+  'bAllowEnhanceStat_Stamina',
+  'bAllowEnhanceStat_Weight',
+  'bAllowEnhanceStat_WorkSpeed',
+  'bCharacterRecreateInHardcore',
+  'BlockRespawnTime',
+  'RespawnPenaltyDurationThreshold',
+  'RespawnPenaltyTimeScale',
 ];
 
 export const GuildSettingsOptionsKey = [
@@ -45,12 +55,14 @@ export const GuildSettingsOptionsKey = [
   'bEnableDefenseOtherGuildPlayer',
   'bCanPickupOtherGuildDeathPenaltyDrop',
   'bInvisibleOtherGuildBaseCampAreaFX',
+  'GuildRejoinCooldownMinutes',
 ];
 
 export const BuildSettingsOptionsKey = [
   'BuildObjectDamageRate',
   'BuildObjectDeteriorationDamageRate',
   'bBuildAreaLimit',
+  'MaxBuildingLimitNum',
 ];
 
 export const DropSettingsOptionsKey = [
@@ -59,10 +71,21 @@ export const DropSettingsOptionsKey = [
   'EnemyDropItemRate',
   'DropItemAliveMaxHours',
   'SupplyDropSpan',
+  'EquipmentDurabilityDamageRate',
+  'ItemCorruptionMultiplier',
+  'ItemWeightRate',
+];
+
+export const PvPSettingsOptionsKey = [
+  'bAdditionalDropItemWhenPlayerKillingInPvPMode',
+  'AdditionalDropItemWhenPlayerKillingInPvPMode',
+  'AdditionalDropItemNumWhenPlayerKillingInPvPMode',
+  'bDisplayPvPItemNumOnWorldMap_BaseCamp',
+  'bDisplayPvPItemNumOnWorldMap_Player',
 ];
 
 export const OthersSettingsOptionsKey = [
-  //'CrossplayPlatforms',
+  'CrossplayPlatforms',
   'DayTimeSpeedRate',
   'NightTimeSpeedRate',
 
@@ -80,13 +103,21 @@ export const OthersSettingsOptionsKey = [
 
   'RandomizerType',
   'RandomizerSeed',
-  //
 
   'bHardcore',
   'bIsUseBackupSaveData',
+
+  'bAllowClientMod',
+  'ChatPostLimitPerMinute',
+  'LogFormatType',
+  'ItemContainerForceMarkDirtyInterval',
+
+  'DenyTechnologyList',
 ];
 
-export const worldSettingsOptions: any = {
+import { WorldSettingsOptions } from '../../../types/WorldSettings.types';
+
+export const worldSettingsOptions: WorldSettingsOptions = {
   DayTimeSpeedRate: { range: [1, 50], type: 'num_10' },
   NightTimeSpeedRate: { range: [1, 50], type: 'num_10' },
   ExpRate: { range: [1, 200], type: 'num_10' },
@@ -135,6 +166,7 @@ export const worldSettingsOptions: any = {
   bCanPickupOtherGuildDeathPenaltyDrop: { type: 'switch' },
   bEnableNonLoginPenalty: { type: 'switch' },
   bEnableFastTravel: { type: 'switch' },
+  bEnableFastTravelOnlyBaseCamp: { type: 'switch' },
   bIsStartLocationSelectByMap: { type: 'switch' },
   bExistPlayerAfterLogout: { type: 'switch' },
   bEnableDefenseOtherGuildPlayer: { type: 'switch' },
@@ -147,17 +179,17 @@ export const worldSettingsOptions: any = {
   bInvisibleOtherGuildBaseCampAreaFX: { type: 'switch', default: false },
   AutoSaveSpan: { range: [300, 6000], type: 'num_10', default: 300 },
 
-  // CrossplayPlatforms: {
-  //   noTranslate: true,
-  //   range: [
-  //     "'(Steam,Xbox,PS5,Mac)'",
-  //     "'(Steam)'",
-  //     "'(Xbox)'",
-  //     "'(PS5)'",
-  //     "'(Mac)'",
-  //   ],
-  //   type: 'options',
-  // },
+  CrossplayPlatforms: {
+    noTranslate: true,
+    range: [
+      "'(Steam,Xbox,PS5,Mac)'",
+      "'(Steam)'",
+      "'(Xbox)'",
+      "'(PS5)'",
+      "'(Mac)'",
+    ],
+    type: 'options',
+  },
   ServerReplicatePawnCullDistance: {
     range: [5000, 15000],
     type: 'num',
@@ -185,4 +217,50 @@ export const worldSettingsOptions: any = {
   bIsRandomizerPalLevelRandom: { type: 'switch' },
   bIsUseBackupSaveData: { type: 'switch' },
   bPalLost: { type: 'switch' },
+
+  // --- New settings (Palworld v0.7.2) ---
+
+  // Player
+  bAllowEnhanceStat_Attack: { type: 'switch', default: true },
+  bAllowEnhanceStat_Health: { type: 'switch', default: true },
+  bAllowEnhanceStat_Stamina: { type: 'switch', default: true },
+  bAllowEnhanceStat_Weight: { type: 'switch', default: true },
+  bAllowEnhanceStat_WorkSpeed: { type: 'switch', default: true },
+  bCharacterRecreateInHardcore: { type: 'switch', default: false },
+  BlockRespawnTime: { range: [0, 600], type: 'num', default: 0 },
+  RespawnPenaltyDurationThreshold: { range: [0, 3600], type: 'num', default: 0 },
+  RespawnPenaltyTimeScale: { range: [1, 50], type: 'num_10', default: 10 },
+
+  // Guild
+  GuildRejoinCooldownMinutes: { range: [0, 1440], type: 'num', default: 0 },
+
+  // Build
+  MaxBuildingLimitNum: { range: [0, 100000], type: 'num', default: 0 },
+
+  // Drop / Items
+  EquipmentDurabilityDamageRate: { range: [1, 50], type: 'num_10', default: 10 },
+  ItemCorruptionMultiplier: { range: [0, 50], type: 'num_10', default: 10 },
+  ItemWeightRate: { range: [1, 50], type: 'num_10', default: 10 },
+
+  // PvP
+  bAdditionalDropItemWhenPlayerKillingInPvPMode: { type: 'switch', default: false },
+  AdditionalDropItemWhenPlayerKillingInPvPMode: {
+    range: ['None', 'Item', 'ItemAndEquipment', 'All'],
+    type: 'options',
+    default: 'None',
+  },
+  AdditionalDropItemNumWhenPlayerKillingInPvPMode: { range: [0, 100], type: 'num', default: 0 },
+  bDisplayPvPItemNumOnWorldMap_BaseCamp: { type: 'switch', default: false },
+  bDisplayPvPItemNumOnWorldMap_Player: { type: 'switch', default: false },
+
+  // Others
+  bAllowClientMod: { type: 'switch', default: false },
+  ChatPostLimitPerMinute: { range: [0, 100], type: 'num', default: 10 },
+  LogFormatType: {
+    range: ['Text', 'Json'],
+    type: 'options',
+    default: 'Text',
+  },
+  ItemContainerForceMarkDirtyInterval: { range: [1, 100], type: 'num_10', default: 10 },
+  DenyTechnologyList: { type: 'text', default: '' },
 };

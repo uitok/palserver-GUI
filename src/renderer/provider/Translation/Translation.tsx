@@ -1,18 +1,21 @@
-/* eslint-disable react/jsx-no-constructed-context-values */
-
-import { useState } from 'react';
+import { ReactNode, useMemo } from 'react';
 import type { Language } from '../../../../locales';
 import TranslationContext from './TranslationContext';
 import useLocalState from '../../hooks/useLocalState';
 
-export default function Translation({ children }: { children: any }) {
+export default function Translation({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useLocalState<Language>(
     'language',
     getDefaultLanguage(),
   );
 
+  const contextValue = useMemo(
+    () => ({ language, setLanguage }),
+    [language, setLanguage],
+  );
+
   return (
-    <TranslationContext.Provider value={{ language, setLanguage }}>
+    <TranslationContext.Provider value={contextValue}>
       {children}
     </TranslationContext.Provider>
   );

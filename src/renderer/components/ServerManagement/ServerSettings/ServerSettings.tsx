@@ -10,19 +10,35 @@ import {
   TextField,
   Theme,
 } from '@radix-ui/themes';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import useTranslation from '../../../hooks/translation/useTranslation';
 import _ from 'lodash';
 import useSelectedServerInstance from '../../../redux/selectedServerInstance/useSelectedServerInstance';
 import useWorldSettings from '../../../hooks/server/world-settings/useWorldSettings';
 import trimWorldSettingsString from '../../../../utils/trimWorldSettingsString';
-import SecureEye from '../../SecureEye';
 import SaveBackup from './ServerBackup/ServerBackup';
 import Link from '../../Link';
 import useServerInfo from '../../../hooks/server/info/useServerInfo';
 import Channels from '../../../../main/ipcs/channels';
 import PalguardSettings from './PalguardSettings/PalguardSettings';
+import WhitelistSettings from './WhitelistSettings/WhitelistSettings';
 import useIsRunningServers from '../../../redux/isRunningServers/useIsRunningServers';
+
+type SettingsOption = {
+  id: string;
+  title: string;
+  desciption: ReactNode;
+  type?: 'input' | 'button' | 'options';
+  value?: string | number | boolean;
+  values?: string[];
+  labels?: string[];
+  onValueChange?: (v: any) => void;
+  action?: () => void;
+  buttonText?: ReactNode;
+  disabled?: boolean;
+  hidden?: boolean;
+  secure?: boolean;
+};
 
 export default function ServerSettings() {
   const { t } = useTranslation();
@@ -41,6 +57,7 @@ export default function ServerSettings() {
 
   const [openSaveBackup, setOpenSaveBackup] = useState(false);
   const [openPalguardSettings, setOpenPalguardSettings] = useState(false);
+  const [openWhitelist, setOpenWhitelist] = useState(false);
 
   const settingOptions = {
     ServerUpgrade: {
@@ -209,6 +226,23 @@ export default function ServerSettings() {
           });
         },
       },
+      WorkerThreads: {
+        disabled: isServerRunning,
+        id: 'WorkerThreads',
+        title: t('WorkerThreads'),
+        desciption: t('WorkerThreadsDesc'),
+        type: 'input',
+        value: serverInfo?.workerThreads || '',
+        onValueChange(v) {
+          const num = Number(v);
+          if (v === '' || (!isNaN(num) && num >= 1 && num <= 128)) {
+            setServerInfo({
+              ...serverInfo!,
+              workerThreads: v === '' ? undefined : num,
+            });
+          }
+        },
+      },
     },
     Internet: {
       RCONEnabled: {
@@ -239,7 +273,10 @@ export default function ServerSettings() {
         type: 'input',
         value: worldSettings.PublicPort,
         onValueChange(v) {
-          setWorldSettings({ ...worldSettings, PublicPort: v });
+          const port = Number(v);
+          if (v === '' || (!isNaN(port) && port >= 1 && port <= 65535)) {
+            setWorldSettings({ ...worldSettings, PublicPort: v });
+          }
         },
       },
 
@@ -251,7 +288,10 @@ export default function ServerSettings() {
         type: 'input',
         value: worldSettings.RCONPort,
         onValueChange(v) {
-          setWorldSettings({ ...worldSettings, RCONPort: v });
+          const port = Number(v);
+          if (v === '' || (!isNaN(port) && port >= 1 && port <= 65535)) {
+            setWorldSettings({ ...worldSettings, RCONPort: v });
+          }
         },
       },
       RESTAPIPort: {
@@ -262,7 +302,10 @@ export default function ServerSettings() {
         type: 'input',
         value: worldSettings.RESTAPIPort,
         onValueChange(v) {
-          setWorldSettings({ ...worldSettings, RESTAPIPort: v });
+          const port = Number(v);
+          if (v === '' || (!isNaN(port) && port >= 1 && port <= 65535)) {
+            setWorldSettings({ ...worldSettings, RESTAPIPort: v });
+          }
         },
       },
       OpenToCommunity: {
@@ -341,26 +384,32 @@ export default function ServerSettings() {
         type: 'button',
         buttonText: t('Open'),
         action() {
-          window.electron.openExplorer(
-            window.electron.node
-              .path()
-              .join(
-                window.electron.constant.USER_SERVER_INSTANCES_PATH(),
-                selectedServerInstance,
-                'server/Pal/Binaries/Win64/PalDefender/Config.json',
-              ),
-          );
-          // setOpenPalguardSettings(true);
+          setOpenPalguardSettings(true);
         },
       },
-      // EnableCoffee: {
-      //   id: 'EnableCoffee',
-      //   title: '啟用咖哩棒套裝',
-      //   desciption: '啟用咖哩棒套裝的完美模組造型啟動畫面，兄弟，你好香。',
-      //   value: false,
-      // },
     },
     Security: {
+      SaveWorldNow: {
+        id: 'SaveWorldNow',
+        title: t('SaveWorldNow'),
+        desciption: t('SaveWorldNowDesc'),
+        type: 'button',
+        buttonText: t('Save'),
+        disabled: !isServerRunning,
+        action() {
+          window.electron.ipcRenderer
+            .invoke(Channels.sendRestAPI, selectedServerInstance, '/save', {
+              method: 'post',
+              body: {},
+            })
+            .then(() => {
+              window.electron.ipcRenderer.sendMessage(
+                'alert',
+                t('SaveWorldDone'),
+              );
+            });
+        },
+      },
       ServerBackupRecord: {
         id: 'ServerBackupRecord',
         title: t('ServerBackupRecord'),
@@ -394,61 +443,18 @@ export default function ServerSettings() {
         },
         secure: true,
       },
-      // WhiteListEnbaled: {
-      //   hidden: !serverInfo?.palguardEnabled,
-      //   id: 'WhiteListEnbaled',
-      //   title: '啟用白名單',
-      //   desciption: '啟用白名單系統。非邀請的用戶無法進入伺服器。',
-      //   value: false,
-      // },
+      WhitelistManagement: {
+        hidden: !serverInfo?.palguardEnabled,
+        id: 'WhitelistManagement',
+        title: t('WhitelistManagement'),
+        desciption: t('WhitelistManagementDesc'),
+        type: 'button',
+        buttonText: t('Open'),
+        action() {
+          setOpenWhitelist(true);
+        },
+      },
     },
-    // Restart: {
-    //   AutoRestart: {
-    //     disabled: isServerRunning,
-    //     id: 'AutoRestart',
-    //     title: t('AutoRestart'),
-    //     desciption: t('AutoRestartDesc'),
-    //     type: 'options',
-    //     values: [0, 6, 12, 24],
-    //     labels: [
-    //       t('SwitchOff'),
-    //       '6 ' + t('HourPerTime'),
-    //       '12 ' + t('HourPerTime'),
-    //       '24 ' + t('HourPerTime'),
-    //     ],
-    //     value: serverInfo?.AutoRestart,
-    //     onValueChange(v) {
-    //       setServerInfo({
-    //         ...serverInfo!,
-    //         AutoRestart: v,
-    //       });
-    //     },
-    //   },
-    //   CrashRestart: {
-    //     id: 'CrashRestart',
-    //     title: t('CrashRestart'),
-    //     desciption: t('CrashRestartDesc'),
-    //     value: serverInfo?.CrashRestart,
-    //     onValueChange(v) {
-    //       setServerInfo({
-    //         ...serverInfo!,
-    //         CrashRestart: v,
-    //       });
-    //     },
-    //   },
-    //   // OverRamRestart: {
-    //   //   id: 'OverRamRestart',
-    //   //   title: t('OverRamRestart'),
-    //   //   desciption: t('OverRamRestartDesc'),
-    //   //   value: serverInfo?.OverRamRestart,
-    //   //   onValueChange(v) {
-    //   //     setServerInfo({
-    //   //       ...serverInfo!,
-    //   //       OverRamRestart: v,
-    //   //     });
-    //   //   },
-    //   // },
-    // },
     Process: {
       UseIndependentProcess: {
         disabled: isServerRunning,
@@ -505,7 +511,7 @@ export default function ServerSettings() {
             <SettingGroup title={t(groupId)} key={groupId}>
               {_.map(
                 group,
-                (option: any, optionId) =>
+                (option: SettingsOption, optionId) =>
                   option.hidden || (
                     <SettingsItem
                       title={option.title}
@@ -526,13 +532,14 @@ export default function ServerSettings() {
           ))}
         </div>
         {openSaveBackup && <SaveBackup />}
-        {/* {openPalguardSettings && <PalguardSettings />} */}
+        {openWhitelist && <WhitelistSettings />}
+        {openPalguardSettings && <PalguardSettings />}
       </div>
     </AlertDialog.Root>
   );
 }
 
-function SettingsItem({
+const SettingsItem = React.memo(function SettingsItem({
   title,
   desc,
   type,
@@ -546,15 +553,15 @@ function SettingsItem({
   disabled,
 }: {
   title: string;
-  desc: string;
+  desc: ReactNode;
   type?: 'input' | 'button' | 'options';
-  values?: any[];
+  values?: string[];
   labels?: string[];
-  value: any;
+  value: string | number | boolean | undefined;
   onValueChange: (v: any) => void;
   secure?: boolean;
   action?: () => void;
-  buttonText?: string;
+  buttonText?: ReactNode;
   disabled?: boolean;
 }) {
   const { t } = useTranslation();
@@ -615,9 +622,9 @@ function SettingsItem({
       </div>
     </Theme>
   );
-}
+});
 
-function SettingGroup({ title, children }: { title: string; children: any }) {
+function SettingGroup({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="pb-2">
       <Text weight="bold" size="6">

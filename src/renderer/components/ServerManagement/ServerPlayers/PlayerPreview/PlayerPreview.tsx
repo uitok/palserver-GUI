@@ -1,12 +1,11 @@
 /* eslint-disable global-require */
 
-import { Box, Button, IconButton, Text, Theme } from '@radix-ui/themes';
-import React, { useEffect, useState } from 'react';
-import useServerOnlinePlayers from '../../../../hooks/server/players/useServerOnlinePlayers';
+import { Box, Button, Text, Theme } from '@radix-ui/themes';
+import { useState } from 'react';
+import { OnlinePlayer } from '../../../../hooks/server/players/useServerOnlinePlayers';
 import useSelectedServerInstance from '../../../../redux/selectedServerInstance/useSelectedServerInstance';
 import _ from 'lodash';
 import useTranslation from '../../../../hooks/translation/useTranslation';
-import { MdOutlineMoreVert } from 'react-icons/md';
 import PlayerMoreAction from '../PlayerMoreAction/PlayerMoreAction';
 import Channels from '../../../../../main/ipcs/channels';
 import { PiEye, PiEyeClosed } from 'react-icons/pi';
@@ -16,17 +15,18 @@ import useServerBanList from '../../../../hooks/server/ban/useServerBanList';
 import { handleCopyToClickboard } from '../../../RightSection/ServerPreview/ServerPreview';
 
 export default function PlayerPreview({
-  playerIndex,
+  player,
 }: {
-  playerIndex: number;
+  player: OnlinePlayer;
 }) {
   const { t } = useTranslation();
 
   const { selectedServerInstance } = useSelectedServerInstance();
 
-  const players = useServerOnlinePlayers(selectedServerInstance);
-  const player = players[playerIndex] || {};
   const playerImages = useAllServerIcons();
+
+  const banList = useServerBanList(selectedServerInstance);
+  const isBanned = banList.includes(`steam_${player.userId?.slice(6)}`);
 
   // eslint-disable-next-line no-use-before-define
   const location = getInGameLocation(player.location_x, player.location_y);
@@ -122,9 +122,11 @@ export default function PlayerPreview({
           <Button onClick={handleBanPlayer} size="1" color="red">
             {t('Ban')}
           </Button>
-          {/* <IconButton size={'1'} color="gray">
-            <MdOutlineMoreVert />
-          </IconButton> */}
+          {isBanned && (
+            <Button onClick={handleUnBanPlayer} size="1" color="yellow">
+              {t('UnBan')}
+            </Button>
+          )}
           <PlayerMoreAction
             name={player.name}
             playerId={player.playerId}
