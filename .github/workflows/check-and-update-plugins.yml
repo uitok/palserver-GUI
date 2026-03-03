@@ -1,0 +1,220 @@
+name: Check and Update Plugins
+
+on:
+  schedule:
+    # 每天 UTC 00:00 (北京时间 08:00) 检查一次
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 允许手动触发
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: check-plugin-updates
+  cancel-in-progress: true
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Check UE4SS latest version
+        id: ue4ss
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          RESPONSE=$(curl -fsSL \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/UE4SS-RE/RE-UE4SS/releases/latest)
+          LATEST=$(echo "$RESPONSE" | jq -r '.tag_name')
+          if [ -z "$LATEST" ] || [ "$LATEST" = "null" ]; then
+            echo "无法解析 UE4SS 最新版本" >&2
+            exit 1
+          fi
+          echo "latest=$LATEST" >> "$GITHUB_OUTPUT"
+          echo "UE4SS 最新版本: $LATEST"
+
+      - name: Check PalGuard latest version
+        id: palguard
+        continue-on-error: true
+        run: |
+          # 需要替换为实际的 PalGuard 仓库
+          # LATEST=$(curl -s https://api.github.com/repos/OWNER/REPO/releases/latest | jq -r '.tag_name')
+          # echo "latest=$LATEST" >> $GITHUB_OUTPUT
+          echo "latest=未知" >> "$GITHUB_OUTPUT"
+          echo "PalGuard 仓库地址待确认"
+
+      - name: Read current versions
+        id: current
+        run: |
+          if [ -f "assets/engine/server-template/UE4SS/ue4ss.version.txt" ]; then
+            UE4SS_CURRENT=$(cat assets/engine/server-template/UE4SS/ue4ss.version.txt)
+            echo "ue4ss_current=$UE4SS_CURRENT" >> "$GITHUB_OUTPUT"
+          else
+            echo "ue4ss_current=未安装" >> "$GITHUB_OUTPUT"
+          fi
+
+          if [ -f "assets/engine/server-template/Palguard/palguard.version.txt" ]; then
+            PALGUARD_CURRENT=$(cat assets/engine/server-template/Palguard/palguard.version.txt)
+            echo "palguard_current=$PALGUARD_CURRENT" >> "$GITHUB_OUTPUT"
+          else
+            echo "palguard_current=未安装" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check if updates needed
+        id: check
+        run: |
+          UE4SS_LATEST="${{ steps.ue4ss.outputs.latest }}"
+          UE4SS_CURRENT="${{ steps.current.outputs.ue4ss_current }}"
+
+          if [ "$UE4SS_LATEST" != "$UE4SS_CURRENT" ]; then
+            echo "needs_update=true" >> "$GITHUB_OUTPUT"
+            echo "需要更新 UE4SS: $UE4SS_CURRENT -> $UE4SS_LATEST"
+          else
+            echo "needs_update=false" >> "$GITHUB_OUTPUT"
+            echo "UE4SS 已是最新版本"
+          fi
+
+      - name: Download and update plugins
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          npm install
+          npm run update-plugins
+
+      - name: Create Pull Request
+        if: steps.check.outputs.needs_update == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            chore: 更新插件到最新版本
+
+            - UE4SS: ${{ steps.current.outputs.ue4ss_current }} -> ${{ steps.ue4ss.outputs.latest }}
+          branch: auto-update-plugins
+          delete-branch: true
+          title: '🔄 自动更新插件到最新版本'
+          body: |
+            ## 🤖 自动更新插件
+
+            此 PR 由 GitHub Actions 自动创建，更新插件到最新版本。
+
+            ### 更新内容
+
+            | 插件 | 当前版本 | 最新版本 | 状态 |
+            |------|---------|---------|------|
+            | UE4SS | ${{ steps.current.outputs.ue4ss_current }} | ${{ steps.ue4ss.outputs.latest }} | ✅ 已更新 |
+            | PalGuard | ${{ steps.current.outputs.palguard_current }} | ${{ steps.palguard.outputs.latest }} | ⏸️ 待确认仓库 |
+
+            ### 发布页面
+
+            - [UE4SS ${{ steps.ue4ss.outputs.latest }}](https://github.com/UE4SS-RE/RE-UE4SS/releases/tag/${{ steps.ue4ss.outputs.latest }})
+
+            ### 测试建议
+
+            - [ ] 验证 UE4SS 文件完整性
+            - [ ] 测试与当前 Palworld 版本兼容性
+            - [ ] 检查服务器启动正常
+
+            ### 注意事项
+
+            ⚠️ 合并前请确认新版本与 Palworld 服务器兼容。
+
+            ---
+
+            *由 [check-and-update-plugins.yml](.github/workflows/check-and-update-plugins.yml) 自动生成*
+          labels: |
+            plugin-update
+            automated
+            dependencies
+          assignees: ${{ github.repository_owner }}
+
+      - name: Update tracking issue
+        if: steps.check.outputs.needs_update == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueTitle = '🔄 插件版本跟踪';
+            const ue4ssLatest = '${{ steps.ue4ss.outputs.latest }}';
+            const ue4ssCurrent = '${{ steps.current.outputs.ue4ss_current }}';
+            const palguardLatest = '${{ steps.palguard.outputs.latest }}';
+            const palguardCurrent = '${{ steps.current.outputs.palguard_current }}';
+
+            // 查找现有的跟踪 issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'plugin-tracking'
+            });
+
+            let trackingIssue = issues.data.find(issue => issue.title === issueTitle);
+
+            const updateComment = `
+            ## 📅 ${new Date().toISOString().split('T')[0]} 更新检测
+
+            | 插件 | 当前版本 | 最新版本 | 状态 |
+            |------|---------|---------|------|
+            | UE4SS | ${ue4ssCurrent} | ${ue4ssLatest} | ${ue4ssCurrent === ue4ssLatest ? '✅ 最新' : '🔄 已创建 PR'} |
+            | PalGuard | ${palguardCurrent} | ${palguardLatest} | ⏸️ 待确认仓库 |
+
+            ${ue4ssCurrent !== ue4ssLatest ? '✅ 已自动创建 PR 更新插件，请查看并合并。' : ''}
+
+            ---
+            `;
+
+            if (!trackingIssue) {
+              // 创建新的跟踪 issue
+              const issueBody = `
+              # 插件版本自动跟踪
+
+              此 issue 用于跟踪 UE4SS 和 PalGuard 插件的版本更新。
+
+              ## 最新检测结果
+
+              ${updateComment}
+
+              ## 说明
+
+              - 🤖 此 issue 由 GitHub Actions 自动维护
+              - 📅 每天 UTC 00:00 自动检查更新
+              - 🔄 检测到更新时会自动创建 PR
+              - ✅ 合并 PR 后版本会自动更新
+
+              ## 相关链接
+
+              - [UE4SS 发布页](https://github.com/UE4SS-RE/RE-UE4SS/releases)
+              - [插件版本文档](docs/PLUGIN_VERSIONS.md)
+              `;
+
+              trackingIssue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issueTitle,
+                body: issueBody,
+                labels: ['plugin-tracking', 'automated']
+              });
+
+              console.log('已创建插件跟踪 issue');
+            } else {
+              // 在现有 issue 添加评论
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: trackingIssue.number,
+                body: updateComment
+              });
+
+              console.log('已更新插件跟踪 issue');
+            }
