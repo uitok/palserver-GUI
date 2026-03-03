@@ -6,6 +6,14 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch: # 允许手动触发
 
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: check-plugin-updates
+  cancel-in-progress: true
+
 jobs:
   check-updates:
     runs-on: ubuntu-latest
@@ -21,9 +29,20 @@ jobs:
 
       - name: Check UE4SS latest version
         id: ue4ss
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          LATEST=$(curl -s https://api.github.com/repos/UE4SS-RE/RE-UE4SS/releases/latest | jq -r '.tag_name')
-          echo "latest=$LATEST" >> $GITHUB_OUTPUT
+          set -euo pipefail
+          RESPONSE=$(curl -fsSL \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/UE4SS-RE/RE-UE4SS/releases/latest)
+          LATEST=$(echo "$RESPONSE" | jq -r '.tag_name')
+          if [ -z "$LATEST" ] || [ "$LATEST" = "null" ]; then
+            echo "无法解析 UE4SS 最新版本" >&2
+            exit 1
+          fi
+          echo "latest=$LATEST" >> "$GITHUB_OUTPUT"
           echo "UE4SS 最新版本: $LATEST"
 
       - name: Check PalGuard latest version
