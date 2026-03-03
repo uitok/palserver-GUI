@@ -96,6 +96,18 @@ palserver GUI 是一款全圖形化介面的專用伺服器架設、管理工具
 
 ### 開發者指南
 
+#### 首次開發設定
+
+克隆儲存庫後，需要下載插件檔案（不在 Git 儲存庫中）：
+
+```bash
+# 安裝依賴
+npm install
+
+# 下載 UE4SS 和 PalGuard 插件
+npm run update-plugins
+```
+
 #### 插件版本管理
 
 本專案內建 UE4SS 和 PalGuard 插件。為確保相容性，請定期檢查並更新到最新版本：

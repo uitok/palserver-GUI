@@ -96,6 +96,18 @@ Currently, palserver GUI is my solo project developed using Typescript + React +
 
 ### Developer Guide
 
+#### First-time Setup
+
+After cloning the repository, you need to download plugin files (not included in Git):
+
+```bash
+# Install dependencies
+npm install
+
+# Download UE4SS and PalGuard plugins
+npm run update-plugins
+```
+
 #### Plugin Version Management
 
 This project includes built-in UE4SS and PalGuard plugins. To ensure compatibility, please check and update to the latest versions regularly:

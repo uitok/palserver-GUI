@@ -107,6 +107,18 @@ palserver GUI 是一款全图形化界面的幻兽帕鲁专用服务器架设、
 
 ### 开发者指南
 
+#### 首次开发设置
+
+克隆仓库后，需要下载插件文件（不在 Git 仓库中）：
+
+```bash
+# 安装依赖
+npm install
+
+# 下载 UE4SS 和 PalGuard 插件
+npm run update-plugins
+```
+
 #### 插件版本管理
 
 本项目内置 UE4SS 和 PalGuard 插件。为确保兼容性，请定期检查并更新到最新版本：

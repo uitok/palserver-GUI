@@ -2,6 +2,17 @@
 
 此文件记录 palserver-GUI 使用的插件版本信息。
 
+## 重要说明
+
+**对于开发者**：
+- 克隆仓库后，`assets/engine/server-template/` 目录不存在（在 `.gitignore` 中）
+- 首次开发前必须运行 `npm run update-plugins` 下载插件
+- 插件文件不会提交到 Git，每个开发者需要独立下载
+
+**对于最终用户**：
+- 下载的 `.exe` 安装包已包含所有插件
+- 无需手动下载，开箱即用
+
 ## 当前版本
 
 ### UE4SS (Unreal Engine 4 Scripting System)
