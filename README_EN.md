@@ -94,6 +94,24 @@ The code is provided solely for educational purposes. Redistribution or resale o
 
 Currently, palserver GUI is my solo project developed using Typescript + React + Electron. If you're interested in contributing to the project (whether in software design, artwork, translation, or programming), feel free to contact me on Discord (username: dalufish) to discuss!
 
+### Developer Guide
+
+#### Plugin Version Management
+
+This project includes built-in UE4SS and PalGuard plugins. To ensure compatibility, please check and update to the latest versions regularly:
+
+```bash
+# Check current plugin versions
+npm run check-plugin-versions
+
+# Automatically update plugins to latest versions
+npm run update-plugins
+```
+
+For more details, see [Plugin Versions Documentation](docs/PLUGIN_VERSIONS.md).
+
+**Note**: GitHub Actions automatically checks for plugin updates daily and creates issues when new versions are available.
+
 ### Support me
 
 If you find the tool helpful, please consider giving the project a star. Thank you!

@@ -94,6 +94,24 @@ palserver GUI 是一款全圖形化介面的專用伺服器架設、管理工具
 
 目前 palserver GUI 是我的一人專案，使用 Typescript + React + Electron 開發。如果你有興趣參與專案開發 (不論是軟體設計上、美術、翻譯或者程序開發)，都歡迎聯繫我的 discord (使用者名稱：dalufish) 討論！
 
+### 開發者指南
+
+#### 插件版本管理
+
+本專案內建 UE4SS 和 PalGuard 插件。為確保相容性，請定期檢查並更新到最新版本：
+
+```bash
+# 檢查當前插件版本
+npm run check-plugin-versions
+
+# 自動更新插件到最新版本
+npm run update-plugins
+```
+
+詳細資訊請查看 [插件版本文檔](docs/PLUGIN_VERSIONS.md)。
+
+**注意**: GitHub Actions 會每天自動檢查插件更新，如有新版本會自動建立 issue 提醒。
+
 ### 給予支持
 
 如果你覺得工具有解決到你的問題 :D，請給專案一顆星星，謝謝。

@@ -105,6 +105,24 @@ palserver GUI 是一款全图形化界面的幻兽帕鲁专用服务器架设、
 
 目前 palserver GUI 是一人项目，使用 TypeScript + React + Electron 开发。如果你有兴趣参与项目开发（不论是软件设计、美术、翻译或者程序开发），都欢迎联系 Discord（用户名：dalufish）讨论！
 
+### 开发者指南
+
+#### 插件版本管理
+
+本项目内置 UE4SS 和 PalGuard 插件。为确保兼容性，请定期检查并更新到最新版本：
+
+```bash
+# 检查当前插件版本
+npm run check-plugin-versions
+
+# 自动更新插件到最新版本
+npm run update-plugins
+```
+
+详细信息请查看 [插件版本文档](docs/PLUGIN_VERSIONS.md)。
+
+**注意**: GitHub Actions 会每天自动检查插件更新，如有新版本会自动创建 issue 提醒。
+
 ### 给予支持
 
 如果你觉得工具有帮助到你 :D，请给项目一颗星星，谢谢。
