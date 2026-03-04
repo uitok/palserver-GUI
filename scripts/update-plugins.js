@@ -74,14 +74,19 @@ function downloadFile(url, dest) {
 }
 
 /**
- * 解压 zip 文件
+ * 解压 zip 文件（跨平台）
  */
 function extractZip(zipPath, targetDir) {
   try {
-    // 使用 PowerShell 解压（Windows）
-    execSync(`powershell -command "Expand-Archive -Path '${zipPath}' -DestinationPath '${targetDir}' -Force"`, {
-      stdio: 'inherit',
-    });
+    if (process.platform === 'win32') {
+      execSync(`powershell -command "Expand-Archive -Path '${zipPath}' -DestinationPath '${targetDir}' -Force"`, {
+        stdio: 'inherit',
+      });
+    } else {
+      execSync(`unzip -o "${zipPath}" -d "${targetDir}"`, {
+        stdio: 'inherit',
+      });
+    }
     console.log(`✓ 解压完成: ${targetDir}`);
   } catch (error) {
     console.error(`✗ 解压失败: ${error.message}`);
