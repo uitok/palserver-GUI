@@ -15,13 +15,35 @@ const { execSync } = require('child_process');
 
 // GitHub API 配置
 const GITHUB_API = 'https://api.github.com';
-const UE4SS_REPO = 'UE4SS-RE/RE-UE4SS';
-const PALGUARD_REPO = 'Dalufishe/PalGuard'; // 需要确认实际仓库名
+
+// 版本配置文件
+const VERSION_CONFIG_PATH = path.join(__dirname, '../plugin-versions.json');
 
 // 目标目录
 const TEMPLATE_DIR = path.join(__dirname, '../assets/engine/server-template');
 const UE4SS_DIR = path.join(TEMPLATE_DIR, 'UE4SS');
 const PALGUARD_DIR = path.join(TEMPLATE_DIR, 'Palguard');
+
+/**
+ * 读取版本配置
+ */
+function readVersionConfig() {
+  try {
+    return JSON.parse(fs.readFileSync(VERSION_CONFIG_PATH, 'utf-8'));
+  } catch {
+    return {
+      ue4ss: { repo: 'UE4SS-RE/RE-UE4SS', version: '' },
+      palguard: { repo: 'Dalufishe/PalGuard', version: '' },
+    };
+  }
+}
+
+/**
+ * 保存版本配置
+ */
+function saveVersionConfig(config) {
+  fs.writeFileSync(VERSION_CONFIG_PATH, JSON.stringify(config, null, 2) + '\n');
+}
 
 /**
  * 获取 GitHub 仓库的最新 release
@@ -35,6 +57,11 @@ function getLatestRelease(repo) {
         'User-Agent': 'palserver-GUI-updater',
       },
     };
+
+    // 使用 GitHub token (CI 环境)
+    if (process.env.GH_TOKEN) {
+      options.headers['Authorization'] = `Bearer ${process.env.GH_TOKEN}`;
+    }
 
     https.get(options, (res) => {
       let data = '';
@@ -59,6 +86,8 @@ function downloadFile(url, dest) {
     https.get(url, (res) => {
       if (res.statusCode === 302 || res.statusCode === 301) {
         // 处理重定向
+        file.close();
+        fs.unlinkSync(dest);
         return downloadFile(res.headers.location, dest).then(resolve).catch(reject);
       }
       res.pipe(file);
@@ -100,8 +129,11 @@ function extractZip(zipPath, targetDir) {
 async function updateUE4SS() {
   console.log('\n=== 更新 UE4SS ===');
 
+  const config = readVersionConfig();
+  const repo = config.ue4ss.repo || 'UE4SS-RE/RE-UE4SS';
+
   try {
-    const release = await getLatestRelease(UE4SS_REPO);
+    const release = await getLatestRelease(repo);
     const version = release.tag_name;
     console.log(`最新版本: ${version}`);
 
@@ -129,10 +161,15 @@ async function updateUE4SS() {
     extractZip(zipPath, UE4SS_DIR);
 
     // 写入版本文件
+    const versionStr = version.replace('v', '');
     fs.writeFileSync(
       path.join(UE4SS_DIR, 'ue4ss.version.txt'),
-      version.replace('v', '')
+      versionStr
     );
+
+    // 更新版本配置
+    config.ue4ss.version = versionStr;
+    saveVersionConfig(config);
 
     // 清理下载的 zip
     fs.unlinkSync(zipPath);
@@ -151,8 +188,11 @@ async function updateUE4SS() {
 async function updatePalGuard() {
   console.log('\n=== 更新 PalGuard ===');
 
+  const config = readVersionConfig();
+  const repo = config.palguard.repo || 'Dalufishe/PalGuard';
+
   try {
-    const release = await getLatestRelease(PALGUARD_REPO);
+    const release = await getLatestRelease(repo);
     const version = release.tag_name;
     console.log(`最新版本: ${version}`);
 
@@ -179,10 +219,15 @@ async function updatePalGuard() {
     extractZip(zipPath, PALGUARD_DIR);
 
     // 写入版本文件
+    const versionStr = version.replace('v', '');
     fs.writeFileSync(
       path.join(PALGUARD_DIR, 'palguard.version.txt'),
-      version.replace('v', '')
+      versionStr
     );
+
+    // 更新版本配置
+    config.palguard.version = versionStr;
+    saveVersionConfig(config);
 
     // 清理下载的 zip
     fs.unlinkSync(zipPath);
