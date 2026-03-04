@@ -57,11 +57,15 @@ const electronHandler = {
       return SERVER_ICONS_PATH;
     },
     SYSTEM_PALGUARD_VERSION() {
-      const version = fs.readFileSync(
-        path.join(TEMPLATE_PATH, 'Palguard', 'palguard.version.txt'),
-        { encoding: 'utf-8' },
-      );
-      return version;
+      try {
+        const version = fs.readFileSync(
+          path.join(TEMPLATE_PATH, 'Palguard', 'palguard.version.txt'),
+          { encoding: 'utf-8' },
+        );
+        return version;
+      } catch (e) {
+        return 0;
+      }
     },
     SERVER_PALGUARD_VERSION(serverId: string) {
       try {
@@ -81,11 +85,15 @@ const electronHandler = {
       }
     },
     SYSTEM_UE4SS_VERSION() {
-      const version = fs.readFileSync(
-        path.join(TEMPLATE_PATH, 'UE4SS', 'ue4ss.version.txt'),
-        { encoding: 'utf-8' },
-      );
-      return Number(version);
+      try {
+        const version = fs.readFileSync(
+          path.join(TEMPLATE_PATH, 'UE4SS', 'ue4ss.version.txt'),
+          { encoding: 'utf-8' },
+        );
+        return Number(version);
+      } catch (e) {
+        return 0;
+      }
     },
     SERVER_UE4SS_VERSION(serverId: string) {
       try {

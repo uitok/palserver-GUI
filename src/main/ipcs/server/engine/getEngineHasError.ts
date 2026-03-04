@@ -14,7 +14,7 @@ ipcMain.handle(Channels.getEngineHasError, async () => {
     // 如果資料夾為空，則返回 true，否則返回 false
     return files.length === 0;
   } catch (error) {
-    // 如果資料夾不存在或發生錯誤，返回 false
-    return false;
+    // 如果資料夾不存在或發生錯誤，視為引擎資料異常
+    return true;
   }
 });

@@ -59,6 +59,12 @@ export default function EngineNeedInstall() {
             // eslint-disable-next-line no-underscore-dangle
             t('HasNotASCIIPath') + window.electron.node.__dirname(),
           );
+        } else {
+          electronAlert(
+            `${String(data.errorMessage || 'INSTALL_FAILED')}${
+              data.detail ? `\n${String(data.detail)}` : ''
+            }`,
+          );
         }
       },
     );
@@ -103,6 +109,12 @@ export default function EngineNeedInstall() {
             // eslint-disable-next-line no-underscore-dangle
             t('HasNotASCIIPath') + window.electron.node.__dirname(),
           );
+        } else {
+          electronAlert(
+            `${String(data.errorMessage || 'INSTALL_FAILED')}${
+              data.detail ? `\n${String(data.detail)}` : ''
+            }`,
+          );
         }
       },
     );
@@ -139,6 +151,12 @@ export default function EngineNeedInstall() {
           electronAlert(
             // eslint-disable-next-line no-underscore-dangle
             t('HasNotASCIIPath') + window.electron.node.__dirname(),
+          );
+        } else {
+          electronAlert(
+            `${String(data.errorMessage || 'INSTALL_FAILED')}${
+              data.detail ? `\n${String(data.detail)}` : ''
+            }`,
           );
         }
       },

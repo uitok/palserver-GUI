@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 // eslint-disable-next-line import/no-cycle
 import getEngineConfig from './utils/engine/getEngineConfig';
@@ -16,11 +17,22 @@ export const APP_DATA_PATH = (function () {
     : path.join(appDataPath, '../Local', 'palserver-gui');
 })();
 
-export const ENGINE_PATH =
-  process.env.NODE_ENV === 'development'
-    ? path.join(__dirname, '../../assets/engine')
-    : path.join(__dirname, '../../../assets/engine');
-// path.join(PROGRAM_APP_DATA_PATH, 'resources/assets/engine');
+const resolveEnginePath = () => {
+  if (process.env.NODE_ENV === 'development') {
+    return path.join(__dirname, '../../assets/engine');
+  }
+
+  const resourcePath = process.resourcesPath || '';
+  const productionCandidates = [
+    path.join(resourcePath, 'assets/engine'),
+    path.join(__dirname, '../../../assets/engine'),
+  ];
+
+  const existingPath = productionCandidates.find((p) => fs.existsSync(p));
+  return existingPath || productionCandidates[0];
+};
+
+export const ENGINE_PATH = resolveEnginePath();
 
 export const USER_SERVER_INSTANCES_PATH =
   getEngineConfig().USER_SERVER_INSTANCES_PATH ||

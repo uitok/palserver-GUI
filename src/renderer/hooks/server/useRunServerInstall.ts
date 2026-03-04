@@ -39,6 +39,12 @@ const useRunServerInstall = () => {
                   // eslint-disable-next-line no-underscore-dangle
                   t('HasNotASCIIPath') + window.electron.node.__dirname(),
                 );
+              } else {
+                electronAlert(
+                  `${String(data.errorMessage || 'INSTALL_FAILED')}${
+                    data.detail ? `\n${String(data.detail)}` : ''
+                  }`,
+                );
               }
             },
           );
