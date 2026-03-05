@@ -1,10 +1,10 @@
 {
   "ue4ss": {
     "repo": "UE4SS-RE/RE-UE4SS",
-    "version": ""
+    "version": "3.0.1"
   },
   "palguard": {
-    "repo": "Dalufishe/PalGuard",
-    "version": ""
+    "repo": "Ultimeit/PalDefender",
+    "version": "1.7.2"
   }
 }

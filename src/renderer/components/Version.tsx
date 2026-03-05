@@ -91,12 +91,18 @@ export default function Version() {
             src={`${SERVER_URL}/static/ads/${language}.png`}
             alt=""
             className="w-full h-full"
-            onLoad={(e) =>
-              (e.target.parentElement.style.display = 'block')
-            }
-            onError={(e) =>
-              (e.target.parentElement.style.display = 'none')
-            }
+            onLoad={(e) => {
+              const parent = e.currentTarget.parentElement;
+              if (parent) {
+                parent.style.display = 'block';
+              }
+            }}
+            onError={(e) => {
+              const parent = e.currentTarget.parentElement;
+              if (parent) {
+                parent.style.display = 'none';
+              }
+            }}
           />
         </div>
       </div>

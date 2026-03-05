@@ -33,7 +33,7 @@ function readVersionConfig() {
   } catch {
     return {
       ue4ss: { repo: 'UE4SS-RE/RE-UE4SS', version: '' },
-      palguard: { repo: 'Dalufishe/PalGuard', version: '' },
+      palguard: { repo: 'Ultimeit/PalDefender', version: '' },
     };
   }
 }
@@ -189,7 +189,7 @@ async function updatePalGuard() {
   console.log('\n=== 更新 PalGuard ===');
 
   const config = readVersionConfig();
-  const repo = config.palguard.repo || 'Dalufishe/PalGuard';
+  const repo = config.palguard.repo || 'Ultimeit/PalDefender';
 
   try {
     const release = await getLatestRelease(repo);
@@ -197,9 +197,10 @@ async function updatePalGuard() {
     console.log(`最新版本: ${version}`);
 
     // 查找下载文件
-    const asset = release.assets.find(a =>
-      a.name.includes('PalGuard') &&
-      a.name.includes('.zip')
+    const asset = release.assets.find(
+      (a) =>
+        (a.name.includes('PalGuard') || a.name.includes('PalDefender')) &&
+        a.name.includes('.zip'),
     );
 
     if (!asset) {

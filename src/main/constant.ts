@@ -36,7 +36,7 @@ export const ENGINE_PATH = resolveEnginePath();
 
 export const USER_SERVER_INSTANCES_PATH =
   getEngineConfig().USER_SERVER_INSTANCES_PATH ||
-  path.join(APP_DATA_PATH, 'instances');
+  path.join(ENGINE_PATH, 'instances');
 
 export const STEAMCMD_PATH = path.join(ENGINE_PATH, 'steamcmd-engine');
 

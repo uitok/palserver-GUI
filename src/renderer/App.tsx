@@ -12,16 +12,10 @@ import WorldSettings from './pages/WorldSettings';
 import ServerManagement from './pages/ServerManagement';
 import useSelectedServerInstance from './redux/selectedServerInstance/useSelectedServerInstance';
 import ModManagement from './pages/ModManagement';
-import { useEffect } from 'react';
-import useRunServerInstall from './hooks/server/useRunServerInstall';
-import EngineInstallingHint from './components/Home/EngineInstallingHint/EngineInstallingHint';
-import useServerEngineVersion from './hooks/server/useServerEngineVersion';
 import EngineNeedInstall from './components/Home/EngineNeedInstall/EngineNeedInstall';
 import ErrorBoundary from './components/ErrorBoundary';
 
 export default function App() {
-  // const [hasInstalled, installMessage] = useRunServerInstall();
-
   const { selectedServerInstance } = useSelectedServerInstance();
 
   return (
@@ -37,17 +31,7 @@ export default function App() {
                 <AboutSection />
                 <Switch>
                   {/* <Route path="/monitor" component={Monitor} /> */}
-                  <Route
-                    exact
-                    path="/"
-                    render={() =>
-                      true ? (
-                        <Home />
-                      ) : (
-                        <EngineInstallingHint installMessage={installMessage} />
-                      )
-                    }
-                  />
+                  <Route exact path="/" render={() => <Home />} />
                   <Route path="/world-settings" component={WorldSettings} />
                   <Route
                     path="/server-management"

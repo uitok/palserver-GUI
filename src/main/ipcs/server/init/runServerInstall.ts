@@ -38,24 +38,17 @@ ipcMain.on(Channels.runServerInstall, async (event) => {
 
   fs.mkdirSync(SERVER_TEMPLATE_PATH, { recursive: true });
 
-  const palserverUpdate = spawn(
-    steamcmd,
-    [
-      '+force_install_dir',
-      SERVER_TEMPLATE_PATH,
-      '+login',
-      'anonymous',
-      '+app_update',
-      // palworld dedicated server id
-      '2394010',
-      'validate',
-      '+quit',
-    ],
-    {
-      cwd: STEAMCMD_PATH,
-      windowsHide: true,
-    },
-  );
+  const installArgs = [
+    '+force_install_dir',
+    SERVER_TEMPLATE_PATH,
+    '+login',
+    'anonymous',
+    '+app_update',
+    // palworld dedicated server id
+    '2394010',
+    'validate',
+    '+quit',
+  ];
 
   let hasFinished = false;
   const replyInstallError = (errorMessage: string, detail?: string) => {
@@ -67,55 +60,78 @@ ipcMain.on(Channels.runServerInstall, async (event) => {
     });
   };
 
-  palserverUpdate.stdout.on('data', (data) => {
-    const message = data.toString().trim();
-    if (message) {
-      event.reply(Channels.runServerInstallReply.PROGRESS, {
-        message: message.slice(0, 200),
-      });
-    }
-  });
+  const runInstallAttempt = (attempt: number) => {
+    const palserverUpdate = spawn(steamcmd, installArgs, {
+      cwd: STEAMCMD_PATH,
+      windowsHide: true,
+    });
 
-  palserverUpdate.stderr.on('data', (data) => {
-    const message = data.toString().trim();
-    if (message) {
-      event.reply(Channels.runServerInstallReply.PROGRESS, {
-        message: `[stderr] ${message.slice(0, 200)}`,
-      });
-    }
-  });
+    palserverUpdate.stdout.on('data', (data) => {
+      const message = data.toString().trim();
+      if (message) {
+        event.reply(Channels.runServerInstallReply.PROGRESS, {
+          message: message.slice(0, 200),
+        });
+      }
+    });
 
-  palserverUpdate.on('error', (error) => {
-    replyInstallError('INSTALL_FAILED', error.message);
-  });
+    palserverUpdate.stderr.on('data', (data) => {
+      const message = data.toString().trim();
+      if (message) {
+        event.reply(Channels.runServerInstallReply.PROGRESS, {
+          message: `[stderr] ${message.slice(0, 200)}`,
+        });
+      }
+    });
 
-  palserverUpdate.on('exit', async (code) => {
-    if (hasFinished) return;
+    palserverUpdate.on('error', (error) => {
+      replyInstallError('INSTALL_FAILED', error.message);
+    });
 
-    if (code !== 0) {
-      replyInstallError('INSTALL_EXIT_NON_ZERO', `exit code: ${code}`);
-      return;
-    }
+    palserverUpdate.on('exit', async (code) => {
+      if (hasFinished) return;
 
-    if (!fs.existsSync(serverExecutablePath)) {
-      replyInstallError('INSTALL_OUTPUT_NOT_FOUND', serverExecutablePath);
-      return;
-    }
+      if (code !== 0) {
+        if (attempt < 2) {
+          event.reply(Channels.runServerInstallReply.PROGRESS, {
+            message: 'Install exited unexpectedly, retrying once...',
+          });
+          runInstallAttempt(attempt + 1);
+          return;
+        }
+        replyInstallError('INSTALL_EXIT_NON_ZERO', `exit code: ${code}`);
+        return;
+      }
 
-    try {
-      await Promise.all([
-        loadSavedTemplate(path.join(SERVER_TEMPLATE_PATH, 'Pal/Saved')),
-        loadUE4SSTemplate(
-          path.join(SERVER_TEMPLATE_PATH, 'Pal/Binaries/Win64'),
-        ),
-        loadPalguardTemplate(
-          path.join(SERVER_TEMPLATE_PATH, 'Pal/Binaries/Win64'),
-        ),
-      ]);
-      hasFinished = true;
-      event.reply(Channels.runServerInstallReply.DONE);
-    } catch (error: any) {
-      replyInstallError('TEMPLATE_SYNC_FAILED', error?.message);
-    }
-  });
+      if (!fs.existsSync(serverExecutablePath)) {
+        if (attempt < 2) {
+          event.reply(Channels.runServerInstallReply.PROGRESS, {
+            message: 'Install output missing, retrying once...',
+          });
+          runInstallAttempt(attempt + 1);
+          return;
+        }
+        replyInstallError('INSTALL_OUTPUT_NOT_FOUND', serverExecutablePath);
+        return;
+      }
+
+      try {
+        await Promise.all([
+          loadSavedTemplate(path.join(SERVER_TEMPLATE_PATH, 'Pal/Saved')),
+          loadUE4SSTemplate(
+            path.join(SERVER_TEMPLATE_PATH, 'Pal/Binaries/Win64'),
+          ),
+          loadPalguardTemplate(
+            path.join(SERVER_TEMPLATE_PATH, 'Pal/Binaries/Win64'),
+          ),
+        ]);
+        hasFinished = true;
+        event.reply(Channels.runServerInstallReply.DONE);
+      } catch (error: any) {
+        replyInstallError('TEMPLATE_SYNC_FAILED', error?.message);
+      }
+    });
+  };
+
+  runInstallAttempt(1);
 });
