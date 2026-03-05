@@ -1,10 +1,9 @@
-import useLatestVersion from '../hooks/firebase/useLatestVersion';
+﻿import useLatestVersion from '../hooks/firebase/useLatestVersion';
 import { ENV, PLATFORM, SERVER_URL, VERSION } from '../../constant/app';
 import useTranslation from '../hooks/translation/useTranslation';
 import formatLocale from '../utils/formatLocale';
 import versionToValue from '../utils/versionToValue';
 import Link from './Link';
-import useOnlineLinksMap from '../hooks/firebase/useOnlineLinksMap';
 
 export default function Version() {
   const { t, language } = useTranslation();
@@ -13,12 +12,9 @@ export default function Version() {
     useLatestVersion();
   const currentVersionValue = versionToValue(VERSION);
 
-  const GUIFAQs = useOnlineLinksMap('GUIFAQs');
-
   return (
-    <div className="absolute bottom-3 text-xs w-[100%] flex justify-between items-end">
+    <div className="absolute bottom-3 text-xs w-[100%] flex items-end">
       <div>
-        {/* created by */}
         <div>
           {latestVersionValue > currentVersionValue ? (
             <Link
@@ -42,7 +38,6 @@ export default function Version() {
             {t('FAQ')}
           </Link>
         </div>
-        {/* version */}
         <div>
           <span className="font-mono">
             {ENV} - {VERSION} ({PLATFORM}){' '}
@@ -54,56 +49,9 @@ export default function Version() {
             onClick={() => {
               window.electron.openLink('https://github.com/Dalufishe');
             }}
-            // dangerouslySetInnerHTML={{
-            //   __html: formatLocale(LOCALES[appLanguage].SupportBy, ['TOC']),
-            // }}
           >
             Dalufishe
           </span>
-          , Supported by{' '}
-          <span
-            className="text-xs underline cursor-pointer"
-            style={{ color: 'white' }}
-            onClick={() => {
-              window.electron.openLink('https://toc.icu/');
-            }}
-            // dangerouslySetInnerHTML={{
-            //   __html: formatLocale(LOCALES[appLanguage].SupportBy, ['TOC']),
-            // }}
-          >
-            TOC
-          </span>
-        </div>
-      </div>
-      {/* ads */}
-      <div>
-        <div
-          className="w-60 h-[60px] bg-transparent -translate-x-7 cursor-pointer hover:scale-110 transition-all"
-          onClick={() => {
-            window.electron.openLink(
-              `${SERVER_URL}/data/links/${language}/Ads`,
-            );
-          }}
-          id="ads-link"
-          style={{ display: 'none' }} // 預設隱藏
-        >
-          <img
-            src={`${SERVER_URL}/static/ads/${language}.png`}
-            alt=""
-            className="w-full h-full"
-            onLoad={(e) => {
-              const parent = e.currentTarget.parentElement;
-              if (parent) {
-                parent.style.display = 'block';
-              }
-            }}
-            onError={(e) => {
-              const parent = e.currentTarget.parentElement;
-              if (parent) {
-                parent.style.display = 'none';
-              }
-            }}
-          />
         </div>
       </div>
     </div>

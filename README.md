@@ -1,152 +1,120 @@
-# palserver GUI
+﻿# palserver GUI
 
 ![RELEASE](https://img.shields.io/badge/RELEASE-1.1.0-green)
 [![Website](https://img.shields.io/badge/website-click-blue)](https://dalufishes-team.gitbook.io/palserver-gui-en)
 [![Discord](https://img.shields.io/badge/discord-click-blue)](https://discord.gg/sgMMdUZd3V)
 ![Make With Love](https://img.shields.io/badge/make_with_%E2%9D%A4%EF%B8%8F-white)
 
-#### [简体中文](/README.md) / [繁體中文](/README_TW.md) / [English](/README_EN.md)
+#### [绠€浣撲腑鏂嘳(/README.md) / [绻侀珨涓枃](/README_TW.md) / [English](/README_EN.md)
 
-> 加入我们的 Discord 以获取更多信息 - https://discord.gg/sgMMdUZd3V
+> 鍔犲叆鎴戜滑鐨?Discord 浠ヨ幏鍙栨洿澶氫俊鎭?- https://discord.gg/sgMMdUZd3V
 
-palserver GUI 是一款全图形化界面的幻兽帕鲁专用服务器架设、管理工具：
+palserver GUI 鏄竴娆惧叏鍥惧舰鍖栫晫闈㈢殑骞诲吔甯曢瞾涓撶敤鏈嶅姟鍣ㄦ灦璁俱€佺鐞嗗伐鍏凤細
 
-- **开箱即用**：易于上手，傻瓜式安装 + 一键启动服务器。
-- **全图形化界面**：提供完整且功能强大的 GUI 界面调整世界设定、服务器设定等。
-- **强大功能扩展**：内建 UE4SS 和 Palguard 防作弊系统、玩家列表、在线地图、多存档管理和模组管理等功能，大幅提升服务器的管理效率和玩家体验。
-- **多语言支持**：支持简体中文、繁体中文、英语、法语、日语五种语言。
-
+- **寮€绠卞嵆鐢?*锛氭槗浜庝笂鎵嬶紝鍌荤摐寮忓畨瑁?+ 涓€閿惎鍔ㄦ湇鍔″櫒銆?- **鍏ㄥ浘褰㈠寲鐣岄潰**锛氭彁渚涘畬鏁翠笖鍔熻兘寮哄ぇ鐨?GUI 鐣岄潰璋冩暣涓栫晫璁惧畾銆佹湇鍔″櫒璁惧畾绛夈€?- **寮哄ぇ鍔熻兘鎵╁睍**锛氬唴寤?UE4SS 鍜?Palguard 闃蹭綔寮婄郴缁熴€佺帺瀹跺垪琛ㄣ€佸湪绾垮湴鍥俱€佸瀛樻。绠＄悊鍜屾ā缁勭鐞嗙瓑鍔熻兘锛屽ぇ骞呮彁鍗囨湇鍔″櫒鐨勭鐞嗘晥鐜囧拰鐜╁浣撻獙銆?- **澶氳瑷€鏀寔**锛氭敮鎸佺畝浣撲腑鏂囥€佺箒浣撲腑鏂囥€佽嫳璇€佹硶璇€佹棩璇簲绉嶈瑷€銆?
 ---
 
-### 一键启动服务器
+### 涓€閿惎鍔ㄦ湇鍔″櫒
 
-安装完成后，创建服务器，点击「右下角启动」即成功架设您的第一个服务器。
-
+瀹夎瀹屾垚鍚庯紝鍒涘缓鏈嶅姟鍣紝鐐瑰嚮銆屽彸涓嬭鍚姩銆嶅嵆鎴愬姛鏋惰鎮ㄧ殑绗竴涓湇鍔″櫒銆?
 ![alt text](/readme/menu.png)
 
-### 可视化世界设定选项
+### 鍙鍖栦笘鐣岃瀹氶€夐」
 
-使用滑动条和输入框调整世界设定，不再需要修改原始文件 PalWorldSettings.ini：
-
+浣跨敤婊戝姩鏉″拰杈撳叆妗嗚皟鏁翠笘鐣岃瀹氾紝涓嶅啀闇€瑕佷慨鏀瑰師濮嬫枃浠?PalWorldSettings.ini锛?
 ![alt text](/readme/worldsettings.png)
 
-### 在线玩家列表
+### 鍦ㄧ嚎鐜╁鍒楄〃
 
-显示在线玩家信息，并提供诸多功能让房主对玩家进行操作。
-
+鏄剧ず鍦ㄧ嚎鐜╁淇℃伅锛屽苟鎻愪緵璇稿鍔熻兘璁╂埧涓诲鐜╁杩涜鎿嶄綔銆?
 ![alt text](/readme/playerlist.png)
 
 ![alt text](/readme/playeraction.png)
 
-### 玩家实时地图
+### 鐜╁瀹炴椂鍦板浘
 
-即时显示玩家在游戏内的等级、坐标和在地图上的位置。
-
+鍗虫椂鏄剧ず鐜╁鍦ㄦ父鎴忓唴鐨勭瓑绾с€佸潗鏍囧拰鍦ㄥ湴鍥句笂鐨勪綅缃€?
 ![alt text](/readme/onlinemap.png)
 
-### 模组管���、导出到游戏
+### 妯＄粍绠★拷锟斤拷銆佸鍑哄埌娓告垙
 
-默认安装 UE4SS 及 Palguard，模组管理面板，一键打包到客户端！
+榛樿瀹夎 UE4SS 鍙?Palguard锛屾ā缁勭鐞嗛潰鏉匡紝涓€閿墦鍖呭埌瀹㈡埛绔紒
 
 ![alt text](/readme/mod.png)
 
-### 服务器管理功能
-
-- **REST API 集成**：踢出、封禁、解封玩家，立即存档等操作优先使用 REST API，RCON 作为备选方案。
-- **PalDefender 命令**：支持生成帕鲁、给予蛋、白名单管理、无敌模式、清空背包、重命名玩家等进阶操作。
-- **Palguard 设定 GUI**：图形化界面配置 palguard.json 插件设定。
-- **白名单管理**：可视化管理 PalDefender 白名单，仅允许白名单玩家加入服务器。
-- **性能监测**：服务器 CPU / 内存使用率实时监控。
-- **自动重启**：支持定时重启、崩溃重启、内存超限重启。
-- **工作线程数**：可自定义服务器工作线程数量 (1-128)，优化多核 CPU 性能。
-
-### 一键更新、一键优化、还有更多
-
-除此之外，还有更多的服务器设定与功能，微调您的服务器以达到最佳的游戏体验！
-
+### 鏈嶅姟鍣ㄧ鐞嗗姛鑳?
+- **REST API 闆嗘垚**锛氳涪鍑恒€佸皝绂併€佽В灏佺帺瀹讹紝绔嬪嵆瀛樻。绛夋搷浣滀紭鍏堜娇鐢?REST API锛孯CON 浣滀负澶囬€夋柟妗堛€?- **PalDefender 鍛戒护**锛氭敮鎸佺敓鎴愬笗椴併€佺粰浜堣泲銆佺櫧鍚嶅崟绠＄悊銆佹棤鏁屾ā寮忋€佹竻绌鸿儗鍖呫€侀噸鍛藉悕鐜╁绛夎繘闃舵搷浣溿€?- **Palguard 璁惧畾 GUI**锛氬浘褰㈠寲鐣岄潰閰嶇疆 palguard.json 鎻掍欢璁惧畾銆?- **鐧藉悕鍗曠鐞?*锛氬彲瑙嗗寲绠＄悊 PalDefender 鐧藉悕鍗曪紝浠呭厑璁哥櫧鍚嶅崟鐜╁鍔犲叆鏈嶅姟鍣ㄣ€?- **鎬ц兘鐩戞祴**锛氭湇鍔″櫒 CPU / 鍐呭瓨浣跨敤鐜囧疄鏃剁洃鎺с€?- **鑷姩閲嶅惎**锛氭敮鎸佸畾鏃堕噸鍚€佸穿婧冮噸鍚€佸唴瀛樿秴闄愰噸鍚€?- **宸ヤ綔绾跨▼鏁?*锛氬彲鑷畾涔夋湇鍔″櫒宸ヤ綔绾跨▼鏁伴噺 (1-128)锛屼紭鍖栧鏍?CPU 鎬ц兘銆?
+### 涓€閿洿鏂般€佷竴閿紭鍖栥€佽繕鏈夋洿澶?
+闄ゆ涔嬪锛岃繕鏈夋洿澶氱殑鏈嶅姟鍣ㄨ瀹氫笌鍔熻兘锛屽井璋冩偍鐨勬湇鍔″櫒浠ヨ揪鍒版渶浣崇殑娓告垙浣撻獙锛?
 ---
 
-### 安装链接及更新
+### 瀹夎閾炬帴鍙婃洿鏂?
+- 瀹夎鍖?(鎺ㄨ崘)锛歔鐐瑰嚮涓嬭浇](https://github.com/Dalufishe/palserver-GUI/releases/download/1.1.0/1.1.0-palserver-gui.exe)
+- 鍏嶅畨瑁呯増鏈細[鐐瑰嚮涓嬭浇](https://github.com/Dalufishe/palserver-GUI/releases/download/1.1.0/unpack-1.1.0-palserver-gui.zip)
 
-- 安装包 (推荐)：[点击下载](https://github.com/Dalufishe/palserver-GUI/releases/download/1.1.0/1.1.0-palserver-gui.exe)
-- 免安装版本：[点击下载](https://github.com/Dalufishe/palserver-GUI/releases/download/1.1.0/unpack-1.1.0-palserver-gui.zip)
+### 甯歌闂
 
-### 常见问题
+- 浣跨敤 VPN 浠嶆棤娉曡繘鍏ユ湇鍔″櫒锛歔鐐瑰嚮鏌ョ湅](https://dalufishes-team.gitbook.io/palserver-gui/faq/shi-yong-vpn-reng-wu-fa-jin-ru-si-fu-qi)
+- 鏈嶅姟鍣ㄦ棤娉曞惎鍔細[鐐瑰嚮鏌ョ湅](https://dalufishes-team.gitbook.io/palserver-gui/faq/si-fu-qi-wu-fa-qi-dong)
+- 鏈嶅姟鍣ㄩ绻佸穿婧冿細[鐐瑰嚮鏌ョ湅](https://dalufishes-team.gitbook.io/palserver-gui/faq/si-fu-qi-bin-fan-beng-kui)
+- 娌℃湁鏄剧ず鍦ㄧ嚎鐜╁锛歔鐐瑰嚮鏌ョ湅](https://dalufishes-team.gitbook.io/palserver-gui/faq/mei-you-xian-shi-zai-xian-wan-jia)
+- 濡備綍灏嗘祴璇曠増鏈?GUI 鏂囦欢杩佺Щ鍒版寮忕増锛歔鐐瑰嚮鏌ョ湅](https://dalufishes-team.gitbook.io/palserver-gui/faq/ce-shi-ban-ben-gui-dang-an-qian-yi-dao-zheng-shi-ban)
 
-- 使用 VPN 仍无法进入服务器：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui/faq/shi-yong-vpn-reng-wu-fa-jin-ru-si-fu-qi)
-- 服务器无法启动：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui/faq/si-fu-qi-wu-fa-qi-dong)
-- 服务器频繁崩溃：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui/faq/si-fu-qi-bin-fan-beng-kui)
-- 没有显示在线玩家：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui/faq/mei-you-xian-shi-zai-xian-wan-jia)
-- 如何将测试版本 GUI 文件迁移到正式版：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui/faq/ce-shi-ban-ben-gui-dang-an-qian-yi-dao-zheng-shi-ban)
+### 鐩稿叧閾炬帴
 
-### 相关链接
+- Discord锛歔鐐瑰嚮鍔犲叆](https://discord.gg/sgMMdUZd3V)
+- 瀹樻柟鏂囨。锛歔鐐瑰嚮鏌ョ湅](https://dalufishes-team.gitbook.io/palserver-gui)
+- 宸村搱濮嗙壒锛歔鐐瑰嚮鏌ョ湅](https://forum.gamer.com.tw/C.php?bsn=71458&snA=2043)
+- Yahoo 娓告垙鏂伴椈锛歔鐐瑰嚮鏌ョ湅](https://tw.news.yahoo.com/palserver-gui-041354287.html)
+- 鐢电帺蹇楋細[鐐瑰嚮鏌ョ湅](https://gank.fanpiece.com/animeradio/%E5%8F%B0%E7%81%A3%E5%A4%A7%E7%A5%9E%E5%89%B5-%E5%B9%BB%E7%8D%B8%E5%B8%95%E9%AD%AF-%E4%B8%80%E9%8D%B5%E9%96%8B%E8%A8%AD%E4%BC%BA%E6%9C%8D%E5%99%A8-%E5%B7%A5%E5%85%B7-%E5%85%A7%E5%BB%BA%E7%B9%81%E4%B8%AD-%E5%9C%96%E5%83%8FUI-c1452714.html)
+- KK3C 鐙傛兂鏇诧細[鐐瑰嚮鏌ョ湅](https://kkplay3c.net/steam-pal-server-gui/)
+- 姊︽父鐢电帺锛歔鐐瑰嚮鏌ョ湅](https://www.game735.com/forum.php?mod=viewthread&tid=388027&extra=page%3D1&ordertype=1)
 
-- Discord：[点击加入](https://discord.gg/sgMMdUZd3V)
-- 官方文档：[点击查看](https://dalufishes-team.gitbook.io/palserver-gui)
-- 巴哈姆特：[点击查看](https://forum.gamer.com.tw/C.php?bsn=71458&snA=2043)
-- Yahoo 游戏新闻：[点击查看](https://tw.news.yahoo.com/palserver-gui-041354287.html)
-- 电玩志：[点击查看](https://gank.fanpiece.com/animeradio/%E5%8F%B0%E7%81%A3%E5%A4%A7%E7%A5%9E%E5%89%B5-%E5%B9%BB%E7%8D%B8%E5%B8%95%E9%AD%AF-%E4%B8%80%E9%8D%B5%E9%96%8B%E8%A8%AD%E4%BC%BA%E6%9C%8D%E5%99%A8-%E5%B7%A5%E5%85%B7-%E5%85%A7%E5%BB%BA%E7%B9%81%E4%B8%AD-%E5%9C%96%E5%83%8FUI-c1452714.html)
-- KK3C 狂想曲：[点击查看](https://kkplay3c.net/steam-pal-server-gui/)
-- 梦游电玩：[点击查看](https://www.game735.com/forum.php?mod=viewthread&tid=388027&extra=page%3D1&ordertype=1)
+### 鐩稿叧瑙嗛
 
-### 相关视频
-
-- 捷克的介绍视频：[点击观看](https://youtu.be/8Vq7uANT0Eo?si=-nH9lkUpsk7DgMW8)
+- 鎹峰厠鐨勪粙缁嶈棰戯細[鐐瑰嚮瑙傜湅](https://youtu.be/8Vq7uANT0Eo?si=-nH9lkUpsk7DgMW8)
 
 <a href="https://youtu.be/8Vq7uANT0Eo?si=-nH9lkUpsk7DgMW8" target="_blank">
 <img src="https://i.ytimg.com/vi_webp/8Vq7uANT0Eo/maxresdefault.webp"/>
 </a>
 
-### 条款
+### 鏉℃
 
-代码仅供学习用途，不得将软件进行二次打包散布、贩卖。也不得进行商业使用。
+浠ｇ爜浠呬緵瀛︿範鐢ㄩ€旓紝涓嶅緱灏嗚蒋浠惰繘琛屼簩娆℃墦鍖呮暎甯冦€佽穿鍗栥€備篃涓嶅緱杩涜鍟嗕笟浣跨敤銆?
+### 鍙備笌璐＄尞
 
-### 参与贡献
+鐩墠 palserver GUI 鏄竴浜洪」鐩紝浣跨敤 TypeScript + React + Electron 寮€鍙戙€傚鏋滀綘鏈夊叴瓒ｅ弬涓庨」鐩紑鍙戯紙涓嶈鏄蒋浠惰璁°€佺編鏈€佺炕璇戞垨鑰呯▼搴忓紑鍙戯級锛岄兘娆㈣繋鑱旂郴 Discord锛堢敤鎴峰悕锛歞alufish锛夎璁猴紒
 
-目前 palserver GUI 是一人项目，使用 TypeScript + React + Electron 开发。如果你有兴趣参与项目开发（不论是软件设计、美术、翻译或者程序开发），都欢迎联系 Discord（用户名：dalufish）讨论！
-
-### 开发者指南
-
-#### 首次开发设置
-
-克隆仓库后，需要下载插件文件（不在 Git 仓库中）：
-
+### 寮€鍙戣€呮寚鍗?
+#### 棣栨寮€鍙戣缃?
+鍏嬮殕浠撳簱鍚庯紝闇€瑕佷笅杞芥彃浠舵枃浠讹紙涓嶅湪 Git 浠撳簱涓級锛?
 ```bash
-# 安装依赖
+# 瀹夎渚濊禆
 npm install
 
-# 下载 UE4SS 和 PalGuard 插件
+# 涓嬭浇 UE4SS 鍜?PalGuard 鎻掍欢
 npm run update-plugins
 ```
 
-#### 插件版本管理
+#### 鎻掍欢鐗堟湰绠＄悊
 
-本项目内置 UE4SS 和 PalGuard 插件。为确保兼容性，请定期检查并更新到最新版本：
+鏈」鐩唴缃?UE4SS 鍜?PalGuard 鎻掍欢銆備负纭繚鍏煎鎬э紝璇峰畾鏈熸鏌ュ苟鏇存柊鍒版渶鏂扮増鏈細
 
 ```bash
-# 检查当前插件版本
-npm run check-plugin-versions
+# 妫€鏌ュ綋鍓嶆彃浠剁増鏈?npm run check-plugin-versions
 
-# 自动更新插件到最新版本
-npm run update-plugins
+# 鑷姩鏇存柊鎻掍欢鍒版渶鏂扮増鏈?npm run update-plugins
 ```
 
-详细信息请查看 [插件版本文档](docs/PLUGIN_VERSIONS.md)。
+璇︾粏淇℃伅璇锋煡鐪?[鎻掍欢鐗堟湰鏂囨。](docs/PLUGIN_VERSIONS.md)銆?
+**娉ㄦ剰**: GitHub Actions 浼氭瘡澶╄嚜鍔ㄦ鏌ユ彃浠舵洿鏂帮紝濡傛湁鏂扮増鏈細鑷姩鍒涘缓 issue 鎻愰啋銆?
+### 缁欎簣鏀寔
 
-**注意**: GitHub Actions 会每天自动检查插件更新，如有新版本会自动创建 issue 提醒。
 
-### 给予支持
+### 鍙嶉闂
 
-如果你觉得工具有帮助到你 :D，请给项目一颗星星，谢谢。
-也可以给予一杯咖啡的支持 [buymeacoffee](https://www.buymeacoffee.com/dalufish)，鼓励我继续创作，感激不尽。
+濡傛灉鎮ㄥ彂鐜颁簡閿欒锛屾杩庡埌 [issues](https://github.com/Dalufishe/palserver-GUI/issues) 鍙戣〃锛屾垜浼氬湪鏈€鐭椂闂村唴瑙ｅ喅闂銆傚彟澶栨湁鎯冲姞鐨勫姛鑳芥垨鏀硅繘涔熼兘娆㈣繋鍒?[issues](https://github.com/Dalufishe/palserver-GUI/issues) 鎻愬嚭銆?
+### 鐗瑰埆鎰熻阿
 
-<a href="https://www.buymeacoffee.com/Dalufish"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=Dalufish&button_colour=FFDD00&font_colour=000000&font_family=Comic&outline_colour=000000&coffee_colour=ffffff" /></a>
+鏈夊ぇ瀹舵墠鏈夌幇鍦ㄧ殑宸ュ叿鍙互浣跨敤锛岄潪甯告劅璋㈠ぇ瀹躲€?https://dalufishes-team.gitbook.io/palserver-gui/gei-yu-zhi-chi/te-bie-gan-xie-ming-dan
 
-### 反馈问题
-
-如果您发现了错误，欢迎到 [issues](https://github.com/Dalufishe/palserver-GUI/issues) 发表，我会在最短时间内解决问题。另外有想加的功能或改进也都欢迎到 [issues](https://github.com/Dalufishe/palserver-GUI/issues) 提出。
-
-### 特别感谢
-
-有大家才有现在的工具可以使用，非常感谢大家。
-https://dalufishes-team.gitbook.io/palserver-gui/gei-yu-zhi-chi/te-bie-gan-xie-ming-dan
