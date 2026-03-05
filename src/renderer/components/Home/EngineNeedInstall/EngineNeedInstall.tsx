@@ -1,5 +1,5 @@
 import { AlertDialog, Button, Flex } from '@radix-ui/themes';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useTranslation from '../../../hooks/translation/useTranslation';
 import useServerEngineVersion from '../../../hooks/server/useServerEngineVersion';
 import Channels from '../../../../main/ipcs/channels';
@@ -11,165 +11,123 @@ import useAllServerInfo from '../../../hooks/server/info/useAllServerInfo';
 export default function EngineNeedInstall() {
   const { t } = useTranslation();
 
-  // 版本資訊
   const { versionValue: latestGameVersion } = useLatestGameVersion();
   const [serverEngineVersion, setServerEngineVersion] =
     useServerEngineVersion();
 
-  // 狀態
   const engineNeedInstall = serverEngineVersion === 0;
   const engineHasError = useServerEngineHasError();
   const engineNeedUpdate =
-    !engineHasError && // @ts-ignore
+    !engineHasError &&
+    // @ts-ignore
     latestGameVersion > serverEngineVersion &&
     serverEngineVersion !== 0;
 
   const serverInfos = useAllServerInfo();
 
   const [openDialog, setOpenDialog] = useState(false);
-  useEffect(() => {
-    // @ts-ignore
-    setOpenDialog(engineNeedInstall || engineNeedUpdate || engineHasError);
-  }, [engineNeedInstall, engineNeedUpdate, engineHasError]);
-
   const [serverEngineStartInstall, setServerEngineStartInstall] =
     useState(false);
   const [serverEnginehasInstall, setServerEngineHasInstall] = useState(false);
   const [serverInstallMessage, setServerInstallMessage] = useState('');
 
-  function runServerInstall() {
-    // 執行伺服器安裝
-    setServerEngineStartInstall(true);
-    window.electron.ipcRenderer.sendMessage(Channels.runServerInstall);
-    window.electron.ipcRenderer.once(
-      Channels.runServerInstallReply.DONE,
-      () => {
-        setServerEngineHasInstall(true);
-        setServerEngineStartInstall(false);
-        setServerEngineVersion(latestGameVersion);
-        // electronAlert(t('EngineInstallFinish'));
-      },
-    );
-    window.electron.ipcRenderer.once(
-      Channels.runServerInstallReply.ERROR,
-      (data) => {
-        setServerEngineStartInstall(false);
-        if (data.errorMessage === 'ASCII') {
-          electronAlert(
-            // eslint-disable-next-line no-underscore-dangle
-            t('HasNotASCIIPath') + window.electron.node.__dirname(),
-          );
-        } else {
-          electronAlert(
-            `${String(data.errorMessage || 'INSTALL_FAILED')}${
-              data.detail ? `\n${String(data.detail)}` : ''
-            }`,
-          );
-        }
-      },
-    );
-    window.electron.ipcRenderer.on(
-      Channels.runServerInstallReply.PROGRESS,
-      (data) => {
-        if (data.message) {
-          setServerInstallMessage(data.message);
-        }
-      },
-    );
-  }
+  useEffect(() => {
+    // Keep dialog open while install/repair is running.
+    if (serverEngineStartInstall) {
+      setOpenDialog(true);
+      return;
+    }
 
-  function runServerInstallandUpdate() {
-    // 執行伺服器安裝
-    setServerEngineStartInstall(true);
-    window.electron.ipcRenderer.sendMessage(Channels.runServerInstall);
-    window.electron.ipcRenderer.once(
-      Channels.runServerInstallReply.DONE,
-      async () => {
-        await Promise.all(
-          serverInfos.map((serverId) =>
-            window.electron.ipcRenderer.invoke(
-              Channels.updateServerInstance,
-              serverId,
+    // @ts-ignore
+    setOpenDialog(engineNeedInstall || engineNeedUpdate || engineHasError);
+  }, [
+    engineNeedInstall,
+    engineNeedUpdate,
+    engineHasError,
+    serverEngineStartInstall,
+  ]);
+
+  const startInstall = useCallback(
+    async ({
+      reinstall,
+      updateInstances,
+    }: {
+      reinstall: boolean;
+      updateInstances: boolean;
+    }) => {
+      setServerEngineStartInstall(true);
+      setServerInstallMessage('');
+      setOpenDialog(true);
+
+      if (reinstall) {
+        await window.electron.ipcRenderer.invoke(Channels.clearSystemCache);
+      }
+
+      let unsubscribeProgress = () => {};
+
+      window.electron.ipcRenderer.once(Channels.runServerInstallReply.DONE, async () => {
+        unsubscribeProgress();
+
+        if (updateInstances) {
+          await Promise.all(
+            serverInfos.map((serverId) =>
+              window.electron.ipcRenderer.invoke(
+                Channels.updateServerInstance,
+                serverId,
+              ),
             ),
-          ),
-        );
+          );
+        }
 
-        // 確保所有的更新完成後才執行以下的狀態更新
         setServerEngineHasInstall(true);
         setServerEngineStartInstall(false);
         setServerEngineVersion(latestGameVersion);
-      },
-    );
-    window.electron.ipcRenderer.once(
-      Channels.runServerInstallReply.ERROR,
-      (data) => {
-        setServerEngineStartInstall(false);
-        if (data.errorMessage === 'ASCII') {
-          electronAlert(
-            // eslint-disable-next-line no-underscore-dangle
-            t('HasNotASCIIPath') + window.electron.node.__dirname(),
-          );
-        } else {
-          electronAlert(
-            `${String(data.errorMessage || 'INSTALL_FAILED')}${
-              data.detail ? `\n${String(data.detail)}` : ''
-            }`,
-          );
-        }
-      },
-    );
-    window.electron.ipcRenderer.on(
-      Channels.runServerInstallReply.PROGRESS,
-      (data) => {
-        if (data.message) {
-          setServerInstallMessage(data.message);
-        }
-      },
-    );
-  }
+      });
 
-  async function runServerReInstall() {
-    setServerEngineStartInstall(true);
-    // 清除舊資料
-    await window.electron.ipcRenderer.invoke(Channels.clearSystemCache);
-    // 重新執行伺服器安裝
-    window.electron.ipcRenderer.sendMessage(Channels.runServerInstall);
-    window.electron.ipcRenderer.once(
-      Channels.runServerInstallReply.DONE,
-      () => {
-        setServerEngineHasInstall(true);
-        setServerEngineStartInstall(false);
-        setServerEngineVersion(latestGameVersion);
-        // electronAlert(t('EngineInstallFinish'));
-      },
-    );
-    window.electron.ipcRenderer.once(
-      Channels.runServerInstallReply.ERROR,
-      (data) => {
-        setServerEngineStartInstall(false);
-        if (data.errorMessage === 'ASCII') {
-          electronAlert(
-            // eslint-disable-next-line no-underscore-dangle
-            t('HasNotASCIIPath') + window.electron.node.__dirname(),
-          );
-        } else {
-          electronAlert(
-            `${String(data.errorMessage || 'INSTALL_FAILED')}${
-              data.detail ? `\n${String(data.detail)}` : ''
-            }`,
-          );
-        }
-      },
-    );
-    window.electron.ipcRenderer.on(
-      Channels.runServerInstallReply.PROGRESS,
-      (data) => {
-        if (data.message) {
-          setServerInstallMessage(data.message);
-        }
-      },
-    );
-  }
+      window.electron.ipcRenderer.once(
+        Channels.runServerInstallReply.ERROR,
+        (data) => {
+          unsubscribeProgress();
+          setServerEngineStartInstall(false);
+          setOpenDialog(true);
+
+          if (data.errorMessage === 'ASCII') {
+            electronAlert(t('HasNotASCIIPath') + window.electron.node.__dirname());
+          } else {
+            electronAlert(
+              `${String(data.errorMessage || 'INSTALL_FAILED')}${
+                data.detail ? `\n${String(data.detail)}` : ''
+              }`,
+            );
+          }
+        },
+      );
+
+      unsubscribeProgress = window.electron.ipcRenderer.on(
+        Channels.runServerInstallReply.PROGRESS,
+        (data) => {
+          if (data.message) {
+            setServerInstallMessage(data.message);
+          }
+        },
+      );
+
+      window.electron.ipcRenderer.sendMessage(Channels.runServerInstall);
+    },
+    [latestGameVersion, serverInfos, setServerEngineVersion, t],
+  );
+
+  const runServerInstall = useCallback(() => {
+    startInstall({ reinstall: false, updateInstances: false });
+  }, [startInstall]);
+
+  const runServerInstallandUpdate = useCallback(() => {
+    startInstall({ reinstall: false, updateInstances: true });
+  }, [startInstall]);
+
+  const runServerReInstall = useCallback(() => {
+    startInstall({ reinstall: true, updateInstances: false });
+  }, [startInstall]);
 
   return (
     <AlertDialog.Root open={openDialog}>
@@ -207,9 +165,7 @@ export default function EngineNeedInstall() {
           {engineHasError &&
             (serverEnginehasInstall ? (
               <AlertDialog.Cancel>
-                <Button onClick={() => setOpenDialog(false)}>
-                  {t('Close')}
-                </Button>
+                <Button onClick={() => setOpenDialog(false)}>{t('Close')}</Button>
               </AlertDialog.Cancel>
             ) : (
               <AlertDialog.Action>
@@ -224,9 +180,7 @@ export default function EngineNeedInstall() {
           {engineNeedInstall &&
             (serverEnginehasInstall ? (
               <AlertDialog.Cancel>
-                <Button onClick={() => setOpenDialog(false)}>
-                  {t('Close')}
-                </Button>
+                <Button onClick={() => setOpenDialog(false)}>{t('Close')}</Button>
               </AlertDialog.Cancel>
             ) : (
               <AlertDialog.Action>
@@ -252,7 +206,7 @@ export default function EngineNeedInstall() {
           {engineNeedUpdate && !serverEnginehasInstall && (
             <AlertDialog.Action>
               <Button
-                onClick={runServerReInstall}
+                onClick={runServerInstallandUpdate}
                 loading={serverEngineStartInstall}
               >
                 {t('OneClickUpdate')}
